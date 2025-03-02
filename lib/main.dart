@@ -14,8 +14,12 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      scrollBehavior: const MaterialScrollBehavior()
-          .copyWith(dragDevices: {PointerDeviceKind.mouse}),
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+        },
+      ),
       routerConfig: goRouter,
     );
   }
