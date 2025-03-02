@@ -7,8 +7,17 @@ class ExplorePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SheetLayout(background: Container(color: Colors.blue), sheet: Container(
-      width: double.maxFinite, height: double.maxFinite,
-      color: Colors.red));
+    return SheetLayout(
+        background: Container(color: Colors.blue),
+        sheet: Column(
+          children: [
+            for (int i = 0; i < 24; i++) ...[
+              Container(
+                  width: double.maxFinite, height: 120.0, color: Colors.red),
+              Container(
+                  width: double.maxFinite, height: 120.0, color: Colors.green),
+            ]
+          ],
+        ));
   }
 }

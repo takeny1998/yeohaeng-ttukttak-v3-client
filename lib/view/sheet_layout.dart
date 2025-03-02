@@ -17,13 +17,32 @@ class SheetLayout extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       final BoxConstraints(:maxWidth, :maxHeight) = constraints;
 
-      if (maxWidth < 840) {
-        return Scaffold(
-            body: SafeArea(child: background),
-            bottomSheet: MaterialBottomSheet(maxHeight: maxHeight, child: sheet));
-      }
+      final bool hasSideSheet = maxWidth >= 840;
 
-      return Scaffold(drawer: sheet, body: background);
+      return Scaffold(
+          appBar: AppBar(),
+          body: Row(
+            children: [
+              Expanded(child: Stack(
+                alignment: AlignmentDirectional.bottomStart,
+                children: [
+                background,
+
+                if (!hasSideSheet)
+                  MaterialBottomSheet(                    child: sheet)
+              ])),
+
+
+
+              if (hasSideSheet)
+                Container(
+                  width: 400.0,
+                  height: double.maxFinite,
+                  padding: const EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 0.0),
+                  child: sheet,
+                )
+            ],
+          ));
     });
   }
 }
