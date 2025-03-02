@@ -15,7 +15,10 @@ class HomePage extends ConsumerWidget {
           child: Column(children: [
             TextButton(
                 onPressed: () => GoRouter.of(context).push('/sample'),
-                child: const Text('Sample Page'))
+                child: const Text('Sample Page')),
+            TextButton(
+                onPressed: () => GoRouter.of(context).push('/explore'),
+                child: const Text('Explore Page')), 
           ]),
         ));
   }
