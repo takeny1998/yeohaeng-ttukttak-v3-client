@@ -4,7 +4,7 @@ import 'package:yeohaeng_ttukttak_v3/view/material_sheet_view.dart';
 class MaterialSideSheetLayout extends StatelessWidget
     implements MaterialSheetView {
   @override
-  final MaterialSheetHeaderBuilder headerBuilder;
+  final MaterialSheetHeader header;
   @override
   final MaterialSheetListContent content;
   @override
@@ -12,7 +12,7 @@ class MaterialSideSheetLayout extends StatelessWidget
 
   const MaterialSideSheetLayout({
     super.key,
-    required this.headerBuilder,
+    required this.header,
     required this.content,
     required this.backgroundBuilder,
   });
@@ -32,7 +32,7 @@ class MaterialSideSheetLayout extends StatelessWidget
                           Container(
                               width: double.maxFinite,
                               alignment: Alignment.center,
-                              child: headerBuilder(false, false)),
+                              child: header.headerBuilder(false)),
                         ],
                       ),
                     ]))),

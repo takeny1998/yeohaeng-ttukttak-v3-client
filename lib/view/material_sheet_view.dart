@@ -4,6 +4,16 @@ typedef MaterialSheetHeaderBuilder = Widget Function(
   bool isBottomSheetExpanded, bool isBottomSheetScolled,
 );
 
+class MaterialSheetHeader {
+
+  final Widget Function(bool isBottomSheetExpanded) headerBuilder;
+  
+  final Widget appBar;
+
+  MaterialSheetHeader({required this.headerBuilder, required this.appBar});
+
+}
+
 class MaterialSheetListContent {
 
   final Widget title;
@@ -21,14 +31,14 @@ typedef MaterialSheetBackgroundBuilder = Widget Function(
 );
 
 abstract interface class MaterialSheetView {
-  final MaterialSheetHeaderBuilder headerBuilder;
+  final MaterialSheetHeader header;
 
   final MaterialSheetListContent content;
 
   final MaterialSheetBackgroundBuilder backgroundBuilder;
 
   MaterialSheetView({
-    required this.headerBuilder,
+    required this.header,
     required this.content,
     required this.backgroundBuilder,
   });

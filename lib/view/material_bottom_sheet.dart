@@ -3,8 +3,9 @@ import 'package:flutter/rendering.dart';
 import 'package:yeohaeng_ttukttak_v3/view/material_sheet_view.dart';
 
 class MaterialBottomSheet extends StatefulWidget implements MaterialSheetView {
+  
   @override
-  final MaterialSheetHeaderBuilder headerBuilder;
+  final MaterialSheetHeader header;
   @override
   final MaterialSheetListContent content;
   @override
@@ -12,7 +13,7 @@ class MaterialBottomSheet extends StatefulWidget implements MaterialSheetView {
 
   const MaterialBottomSheet({
     super.key,
-    required this.headerBuilder,
+    required this.header,
     required this.content,
     required this.backgroundBuilder,
   });
@@ -27,6 +28,7 @@ class _MaterialBottomSheetState extends State<MaterialBottomSheet> {
   final List<double> positions = [0.0, 0.5, 1.0];
 
   static const double maxWidth = 640.0;
+  static const double scrollThreshold = -32.0;
 
   double sheetHeight = 0.0;
 
@@ -34,11 +36,6 @@ class _MaterialBottomSheetState extends State<MaterialBottomSheet> {
 
   bool isAnimating = false;
   bool isContentScrolled = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -63,8 +60,13 @@ class _MaterialBottomSheetState extends State<MaterialBottomSheet> {
             color: isFullyExpanded ? surface : Colors.transparent),
         Column(
           children: [
-            widget.headerBuilder(isFullyExpanded,
-                scrollController.hasClients && scrollController.offset > 0),
+            AnimatedCrossFade(
+                firstChild: widget.header.headerBuilder(isFullyExpanded),
+                secondChild: widget.header.appBar,
+                crossFadeState: isContentScrolled
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+                duration: const Duration(milliseconds: 250)),
             Expanded(
               child: LayoutBuilder(builder: (context, constraints) {
                 final BoxConstraints(maxWidth: width, maxHeight: height) =
@@ -93,26 +95,27 @@ class _MaterialBottomSheetState extends State<MaterialBottomSheet> {
                           minHeight: 48.0,
                           maxHeight: height),
                       decoration: BoxDecoration(
-                        color: surface,
-                        borderRadius: const BorderRadius.only(
+                          color: surface,
+                          borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(28.0),
                             topRight: Radius.circular(28.0),
-                        ),
-                        boxShadow: !isFullyExpanded ? [
-                          BoxShadow(
-                            offset: const Offset(0, 4),
-                            blurRadius: 8.0,
-                            spreadRadius: 0.0,
-                            color: Colors.black.withValues(alpha: 0.15)
                           ),
-                          BoxShadow(
-                            offset: const Offset(0, 1),
-                            blurRadius: 3.0,
-                            spreadRadius: 0.0,
-                            color: Colors.black.withValues(alpha: 0.15)
-                          ),
-                        ] : null
-                      ),
+                          boxShadow: !isFullyExpanded
+                              ? [
+                                  BoxShadow(
+                                      offset: const Offset(0, 4),
+                                      blurRadius: 8.0,
+                                      spreadRadius: 0.0,
+                                      color:
+                                          Colors.black.withValues(alpha: 0.15)),
+                                  BoxShadow(
+                                      offset: const Offset(0, 1),
+                                      blurRadius: 3.0,
+                                      spreadRadius: 0.0,
+                                      color:
+                                          Colors.black.withValues(alpha: 0.15)),
+                                ]
+                              : null),
                       child: GestureDetector(
                         onVerticalDragUpdate: (details) {
                           if (isAnimating || index == positions.length - 1) {
@@ -132,8 +135,9 @@ class _MaterialBottomSheetState extends State<MaterialBottomSheet> {
                             }
                           });
                         },
-                        child: NotificationListener<ScrollNotification>(
-                          onNotification: (ScrollNotification notification) {
+                        child: NotificationListener<ScrollUpdateNotification>(
+                          onNotification:
+                              (ScrollUpdateNotification notification) {
                             // 본문 스크롤 여부를 업데이트
                             bool isContentScrolled =
                                 scrollController.offset > 0.0;
@@ -154,7 +158,8 @@ class _MaterialBottomSheetState extends State<MaterialBottomSheet> {
                             if (direction != ScrollDirection.forward) {
                               return false;
                             }
-                            if (scrollController.offset > 0.0) return false;
+                            if (scrollController.offset > scrollThreshold)
+                              return false;
 
                             setState(() {
                               index--;
@@ -170,23 +175,29 @@ class _MaterialBottomSheetState extends State<MaterialBottomSheet> {
                                 : const NeverScrollableScrollPhysics(),
                             slivers: [
                               SliverToBoxAdapter(
-                                  child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.only(
-                                    top: 22.0, bottom: 22.0),
-                                child: Center(
-                                  child: Container(
-                                    width: 32.0,
-                                    height: 4.0,
-                                    decoration: BoxDecoration(
-                                        color: isFullyExpanded
-                                            ? Colors.transparent
-                                            : onSurfaceVariant,
-                                        borderRadius:
-                                            BorderRadius.circular(16.0)),
-                                  ),
-                                ),
-                              )),
+                                  child: AnimatedCrossFade(
+                                      firstChild: Container(
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.only(
+                                              top: 22.0, bottom: 22.0),
+                                          child: Center(
+                                              child: Container(
+                                            width: 32.0,
+                                            height: 4.0,
+                                            decoration: BoxDecoration(
+                                                color: isFullyExpanded
+                                                    ? Colors.transparent
+                                                    : onSurfaceVariant,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        16.0)),
+                                          ))),
+                                      secondChild: const SizedBox(height: 8.0),
+                                      crossFadeState: isFullyExpanded
+                                          ? CrossFadeState.showSecond
+                                          : CrossFadeState.showFirst,
+                                      duration: 
+                                          const Duration(milliseconds: 250))),
                               SliverToBoxAdapter(child: widget.content.title),
                               SliverList.builder(
                                   itemCount: widget.content.itemCount,
