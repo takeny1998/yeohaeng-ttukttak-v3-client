@@ -7,11 +7,11 @@ class ImageModel extends Equatable {
   final int id;
 
   final String url;
+
   const ImageModel({
     required this.id,
     required this.url,
   });
-
 
   ImageModel copyWith({
     int? id,

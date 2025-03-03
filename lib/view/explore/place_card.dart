@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:yeohaeng_ttukttak_v3/model/image_model.dart';
-import 'package:yeohaeng_ttukttak_v3/model/place_model.dart';
+import 'package:yeohaeng_ttukttak_v3/dto/image_dto.dart';
+import 'package:yeohaeng_ttukttak_v3/dto/place_dto.dart';
+import 'package:yeohaeng_ttukttak_v3/view/material_carosel.dart';
+import 'package:yeohaeng_ttukttak_v3/view/fade_in_failover_image.dart';
 
 class PlaceCard extends StatelessWidget {
-  final PlaceModel place;
+  final PlaceDto place;
 
   const PlaceCard({super.key, required this.place});
 
@@ -22,32 +24,36 @@ class PlaceCard extends StatelessWidget {
 
     final TextTheme(:titleMedium, :bodyMedium) = Theme.of(context).textTheme;
 
+    final TextStyle? subtitleTextStyle =
+        bodyMedium?.copyWith(color: onSurfaceVariant);
+
     return Card.outlined(
         child: Column(children: [
       const SizedBox(height: 16.0),
       Container(
           height: 180.0,
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: CarouselView.weighted(
-            itemSnapping: true,
-            flexWeights: const [8, 2],
+          child: MaterialCarosel(
             children: [
-              for (final ImageModel image in place.images)
-                Skeleton.replace(child: Container(color: surfaceContainer))
+              for (final ImageDto image in place.images)
+                Skeleton.replace(
+                    child: FadeInFailoverImage(image: image))
             ],
           )),
       ListTile(
-          isThreeLine: true,
+          titleTextStyle: titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          subtitleTextStyle: subtitleTextStyle,
           title: Text(place.name),
-          subtitle: Text(place.regionCode,
-              style: bodyMedium?.copyWith(color: onSurfaceVariant)),
+          subtitle: Text(place.address),
           trailing: IconButton.filledTonal(
-              onPressed: () {}, icon: const Icon(Icons.bookmark_outlined))),
+              onPressed: () {},
+              icon: const Icon(Icons.bookmark_border),
+              color: primary)),
       Row(children: [
         const SizedBox(width: 16.0),
         Icon(Icons.star_rate, size: 16.0, color: primary),
         Text(' ${place.rating.toStringAsFixed(1)}(${place.visitCount})',
-            style: bodyMedium?.copyWith(color: onSurfaceVariant)),
+            style: subtitleTextStyle),
         const SizedBox(width: 16.0),
       ]),
       const SizedBox(height: 16.0),

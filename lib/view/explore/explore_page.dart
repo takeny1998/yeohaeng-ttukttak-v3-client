@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:yeohaeng_ttukttak_v3/dto/image_dto.dart';
+import 'package:yeohaeng_ttukttak_v3/dto/place_dto.dart';
 import 'package:yeohaeng_ttukttak_v3/model/image_model.dart';
 import 'package:yeohaeng_ttukttak_v3/model/place_model.dart';
 import 'package:yeohaeng_ttukttak_v3/view/explore/explore_provider.dart';
@@ -14,9 +16,6 @@ class ExplorePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const String title = 'Cheongju-si';
-    const String subtitle = '12 Attractions';
-
     final ColorScheme(
       :outlineVariant,
       :surfaceContainerLow,
@@ -28,34 +27,35 @@ class ExplorePage extends ConsumerWidget {
 
     final asyncState = ref.watch(exploreProvider);
 
+    final List<PlaceDto> places = asyncState.whenOrNull(
+            data: (places) => places) ??
+        List.generate(
+            10,
+            (index) => PlaceDto(
+                id: index + 1,
+                name: BoneMock.name,
+                address: BoneMock.address,
+                longitude: 0.0,
+                latitude: 0.0,
+                rating: 4.5,
+                visitCount: 12,
+                images: List.generate(
+                    5, (index) => ImageDto(id: index + 1, url: '')).toList()));
+
+    const String title = 'Cheongju-si';
+    String subtitle = '${places.length} Attractions';
+
     final Widget titleWidget = Row(
       children: [
         Wrap(
           direction: Axis.vertical,
           children: [
             Text(title, style: titleLarge),
-            Text(subtitle,
-                style: bodyMedium?.copyWith(color: onSurfaceVariant))
+            Text(subtitle, style: bodyMedium?.copyWith(color: onSurfaceVariant))
           ],
         ),
       ],
     );
-
-    final List<PlaceModel> places = asyncState.whenOrNull(
-            data: (places) => places) ??
-        List.generate(
-            10,
-            (index) => PlaceModel(
-                id: index,
-                name: BoneMock.name,
-                regionCode: BoneMock.subtitle,
-                longitude: 0.0,
-                latitude: 0.0,
-                rating: 4.5,
-                visitCount: 12,
-                images:
-                    List.generate(5, (index) => ImageModel(id: index, url: ''))
-                        .toList()),);
 
     return Scaffold(
       body: MaterialResponsiveSheetLayout(
