@@ -14,7 +14,7 @@ class MaterialSheetHeader {
 
 }
 
-class MaterialSheetListContent {
+class MaterialSheetContent  {
 
   final Widget title;
 
@@ -22,7 +22,7 @@ class MaterialSheetListContent {
 
   final Widget Function(BuildContext context, int index) itemBuilder;
 
-  MaterialSheetListContent({required this.title, required this.itemCount, required this.itemBuilder});
+  MaterialSheetContent({required this.title, required this.itemCount, required this.itemBuilder});
 
 }
 
@@ -31,15 +31,17 @@ typedef MaterialSheetBackgroundBuilder = Widget Function(
 );
 
 abstract interface class MaterialSheetLayout {
+
   final MaterialSheetHeader header;
-
-  final MaterialSheetListContent content;
-
+  final MaterialSheetContent content;
   final MaterialSheetBackgroundBuilder backgroundBuilder;
+
+  final bool isLoading;
 
   MaterialSheetLayout({
     required this.header,
     required this.content,
     required this.backgroundBuilder,
+    required this.isLoading,
   });
 }

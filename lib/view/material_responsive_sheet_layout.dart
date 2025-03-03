@@ -3,21 +3,27 @@ import 'package:yeohaeng_ttukttak_v3/view/material_bottom_sheet_layout.dart';
 import 'package:yeohaeng_ttukttak_v3/view/material_sheet_layout.dart';
 import 'package:yeohaeng_ttukttak_v3/view/material_side_sheet_layout.dart';
 
-class MaterialResponsiveSheetLayout extends StatelessWidget implements MaterialSheetLayout {
+class MaterialResponsiveSheetLayout extends StatelessWidget
+    implements MaterialSheetLayout {
   @override
   final MaterialSheetHeader header;
 
   @override
-  final MaterialSheetListContent content;
+  final MaterialSheetContent content;
 
   @override
   final MaterialSheetBackgroundBuilder backgroundBuilder;
 
-  const MaterialResponsiveSheetLayout(
-      {super.key,
-      required this.header,
-      required this.content,
-      required this.backgroundBuilder});
+  @override
+  final bool isLoading;
+
+  const MaterialResponsiveSheetLayout({
+    super.key,
+    required this.header,
+    required this.content,
+    required this.backgroundBuilder,
+    required this.isLoading,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +37,13 @@ class MaterialResponsiveSheetLayout extends StatelessWidget implements MaterialS
             ? MaterialSideSheetLayout(
                 header: header,
                 content: content,
-                backgroundBuilder: backgroundBuilder)
+                backgroundBuilder: backgroundBuilder,
+                isLoading: isLoading)
             : MaterialBottomSheetLayout(
                 header: header,
                 content: content,
                 backgroundBuilder: backgroundBuilder,
-              ),
+                isLoading: isLoading              ),
       );
     });
   }

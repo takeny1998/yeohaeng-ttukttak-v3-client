@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:yeohaeng_ttukttak_v3/model/image_model.dart';
+import 'package:yeohaeng_ttukttak_v3/model/place_model.dart';
+import 'package:yeohaeng_ttukttak_v3/view/explore/explore_provider.dart';
+import 'package:yeohaeng_ttukttak_v3/view/explore/place_card.dart';
 import 'package:yeohaeng_ttukttak_v3/view/material_search_bar.dart';
 import 'package:yeohaeng_ttukttak_v3/view/material_sheet_layout.dart';
-import 'package:yeohaeng_ttukttak_v3/view/sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/view/material_responsive_sheet_layout.dart';
 
 class ExplorePage extends ConsumerWidget {
   const ExplorePage({super.key});
@@ -21,8 +26,40 @@ class ExplorePage extends ConsumerWidget {
 
     final TextTheme(:titleLarge, :bodyMedium) = Theme.of(context).textTheme;
 
+    final asyncState = ref.watch(exploreProvider);
+
+    final Widget titleWidget = Row(
+      children: [
+        Wrap(
+          direction: Axis.vertical,
+          children: [
+            Text(title, style: titleLarge),
+            Text(subtitle,
+                style: bodyMedium?.copyWith(color: onSurfaceVariant))
+          ],
+        ),
+      ],
+    );
+
+    final List<PlaceModel> places = asyncState.whenOrNull(
+            data: (places) => places) ??
+        List.generate(
+            10,
+            (index) => PlaceModel(
+                id: index,
+                name: BoneMock.name,
+                regionCode: BoneMock.subtitle,
+                longitude: 0.0,
+                latitude: 0.0,
+                rating: 4.5,
+                visitCount: 12,
+                images:
+                    List.generate(5, (index) => ImageModel(id: index, url: ''))
+                        .toList()),);
+
     return Scaffold(
       body: MaterialResponsiveSheetLayout(
+        isLoading: asyncState.isLoading,
         header: MaterialSheetHeader(
             headerBuilder: (isBottomSheetExpanded) {
               return AnimatedSwitcher(
@@ -86,27 +123,10 @@ class ExplorePage extends ConsumerWidget {
                         onPressed: () {}, icon: const Icon(Icons.search)))
               ],
             )),
-        content: MaterialSheetListContent(
-            title: Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
-              child: Row(
-                children: [
-                  Wrap(
-                    direction: Axis.vertical,
-                    children: [
-                      Text(title, style: titleLarge),
-                      Text(subtitle,
-                          style: bodyMedium?.copyWith(color: onSurfaceVariant))
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            itemCount: 24,
-            itemBuilder: (context, index) => Container(
-                width: double.maxFinite,
-                height: 120.0,
-                color: index % 2 == 0 ? Colors.red : Colors.green)),
+        content: MaterialSheetContent(
+            title: titleWidget,
+            itemCount: places.length,
+            itemBuilder: (context, index) => PlaceCard(place: places[index])),
         backgroundBuilder: (double bottomSheetHeight) {
           return Container(color: Colors.white60);
         },

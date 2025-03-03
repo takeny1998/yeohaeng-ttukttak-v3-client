@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-import 'package:yeohaeng_ttukttak_v3/model/image.dart';
+import 'package:yeohaeng_ttukttak_v3/model/image_model.dart';
 
-class Place extends Equatable {
+class PlaceModel extends Equatable {
 
   final int id;
 
@@ -20,9 +20,9 @@ class Place extends Equatable {
 
   final int visitCount;
 
-  final List<Image> images;
+  final List<ImageModel> images;
 
-  const Place({
+  const PlaceModel({
     required this.id,
     required this.name,
     required this.regionCode,
@@ -34,7 +34,7 @@ class Place extends Equatable {
   });
 
 
-  Place copyWith({
+  PlaceModel copyWith({
     int? id,
     String? name,
     String? regionCode,
@@ -42,9 +42,9 @@ class Place extends Equatable {
     double? latitude,
     double? rating,
     int? visitCount,
-    List<Image>? images,
+    List<ImageModel>? images,
   }) {
-    return Place(
+    return PlaceModel(
       id: id ?? this.id,
       name: name ?? this.name,
       regionCode: regionCode ?? this.regionCode,
@@ -69,8 +69,8 @@ class Place extends Equatable {
     };
   }
 
-  factory Place.fromMap(Map<String, dynamic> map) {
-    return Place(
+  factory PlaceModel.fromMap(Map<String, dynamic> map) {
+    return PlaceModel(
       id: map['id']?.toInt() ?? 0,
       name: map['name'] ?? '',
       regionCode: map['regionCode'] ?? '',
@@ -78,13 +78,13 @@ class Place extends Equatable {
       latitude: map['latitude']?.toDouble() ?? 0.0,
       rating: map['rating']?.toDouble() ?? 0.0,
       visitCount: map['visitCount']?.toInt() ?? 0,
-      images: List<Image>.from(map['images']?.map((x) => Image.fromMap(x))),
+      images: List<ImageModel>.from(map['images']?.map((x) => ImageModel.fromMap(x))),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Place.fromJson(String source) => Place.fromMap(json.decode(source));
+  factory PlaceModel.fromJson(String source) => PlaceModel.fromMap(json.decode(source));
 
   @override
   String toString() {

@@ -2,22 +2,22 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-class Image extends Equatable {
+class ImageModel extends Equatable {
 
   final int id;
 
   final String url;
-  const Image({
+  const ImageModel({
     required this.id,
     required this.url,
   });
 
 
-  Image copyWith({
+  ImageModel copyWith({
     int? id,
     String? url,
   }) {
-    return Image(
+    return ImageModel(
       id: id ?? this.id,
       url: url ?? this.url,
     );
@@ -30,8 +30,8 @@ class Image extends Equatable {
     };
   }
 
-  factory Image.fromMap(Map<String, dynamic> map) {
-    return Image(
+  factory ImageModel.fromMap(Map<String, dynamic> map) {
+    return ImageModel(
       id: map['id']?.toInt() ?? 0,
       url: map['url'] ?? '',
     );
@@ -39,10 +39,10 @@ class Image extends Equatable {
 
   String toJson() => json.encode(toMap());
 
-  factory Image.fromJson(String source) => Image.fromMap(json.decode(source));
+  factory ImageModel.fromJson(String source) => ImageModel.fromMap(json.decode(source));
 
   @override
-  String toString() => 'Image(id: $id, url: $url)';
+  String toString() => 'ImageModel(id: $id, url: $url)';
 
   @override
   List<Object> get props => [id, url];

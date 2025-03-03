@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:yeohaeng_ttukttak_v3/view/material_sheet_view.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:yeohaeng_ttukttak_v3/view/material_sheet_layout.dart';
 
-class MaterialBottomSheetLayout extends StatefulWidget implements MaterialSheetLayout {
-  
+class MaterialBottomSheetLayout extends StatefulWidget
+    implements MaterialSheetLayout {
   @override
   final MaterialSheetHeader header;
   @override
-  final MaterialSheetListContent content;
+  final MaterialSheetContent content;
   @override
   final MaterialSheetBackgroundBuilder backgroundBuilder;
+  @override
+  final bool isLoading;
 
   const MaterialBottomSheetLayout({
     super.key,
     required this.header,
     required this.content,
     required this.backgroundBuilder,
+    required this.isLoading,
   });
 
   @override
-  State<MaterialBottomSheetLayout> createState() => _MaterialBottomSheetLayoutState();
+  State<MaterialBottomSheetLayout> createState() =>
+      _MaterialBottomSheetLayoutState();
 }
 
 class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
@@ -45,8 +50,12 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme(:onSurfaceVariant, :surface) =
-        Theme.of(context).colorScheme;
+    final ColorScheme(
+      :onSurfaceVariant,
+      :surface,
+      :surfaceContainer,
+      :surfaceContainerHighest
+    ) = Theme.of(context).colorScheme;
 
     final bool isFullyExpanded =
         index == (positions.length - 1) && !isAnimating;
@@ -158,8 +167,9 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
                             if (direction != ScrollDirection.forward) {
                               return false;
                             }
-                            if (scrollController.offset > scrollThreshold)
+                            if (scrollController.offset > scrollThreshold) {
                               return false;
+                            }
 
                             setState(() {
                               index--;
@@ -168,41 +178,55 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
 
                             return false;
                           },
-                          child: CustomScrollView(
-                            controller: scrollController,
-                            physics: isFullyExpanded
-                                ? const BouncingScrollPhysics()
-                                : const NeverScrollableScrollPhysics(),
-                            slivers: [
-                              SliverToBoxAdapter(
-                                  child: AnimatedCrossFade(
-                                      firstChild: Container(
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.only(
-                                              top: 22.0, bottom: 22.0),
-                                          child: Center(
-                                              child: Container(
-                                            width: 32.0,
-                                            height: 4.0,
-                                            decoration: BoxDecoration(
-                                                color: isFullyExpanded
-                                                    ? Colors.transparent
-                                                    : onSurfaceVariant,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        16.0)),
-                                          ))),
-                                      secondChild: const SizedBox(height: 8.0),
-                                      crossFadeState: isFullyExpanded
-                                          ? CrossFadeState.showSecond
-                                          : CrossFadeState.showFirst,
-                                      duration: 
-                                          const Duration(milliseconds: 250))),
-                              SliverToBoxAdapter(child: widget.content.title),
-                              SliverList.builder(
-                                  itemCount: widget.content.itemCount,
-                                  itemBuilder: widget.content.itemBuilder)
-                            ],
+                          child: Skeletonizer(
+                            enabled: widget.isLoading,
+                            enableSwitchAnimation: true,
+                            switchAnimationConfig: const SwitchAnimationConfig(
+                              duration: Duration(milliseconds: 500),
+                            ),
+                            effect: ShimmerEffect(
+                              baseColor: surfaceContainer,
+                              highlightColor: surfaceContainerHighest,
+                            ),
+                            child: ListView(
+                              controller: scrollController,
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                              physics: isFullyExpanded
+                                  ? const BouncingScrollPhysics()
+                                  : const NeverScrollableScrollPhysics(),
+                              children: [
+                                AnimatedCrossFade(
+                                    firstChild: Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.only(bottom: 22.0),
+                                        child: Center(
+                                            child: Container(
+                                          width: 32.0,
+                                          height: 4.0,
+                                          decoration: BoxDecoration(
+                                              color: isFullyExpanded
+                                                  ? Colors.transparent
+                                                  : onSurfaceVariant,
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0)),
+                                        ))),
+                                    secondChild: const SizedBox(height: 8.0),
+                                    crossFadeState: isFullyExpanded
+                                        ? CrossFadeState.showSecond
+                                        : CrossFadeState.showFirst,
+                                    duration:
+                                        const Duration(milliseconds: 250)),
+                                widget.content.title,
+                                const SizedBox(height: 16.0),
+                                for (int i = 0;
+                                    i < widget.content.itemCount;
+                                    i++) ...[
+
+                                  widget.content.itemBuilder(context, i),
+                                  const SizedBox(height: 24.0),
+                                    ]
+                              ],
+                            ),
                           ),
                         ),
                       ),

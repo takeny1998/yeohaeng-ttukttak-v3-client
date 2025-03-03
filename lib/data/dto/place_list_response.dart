@@ -3,13 +3,13 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-import 'package:yeohaeng_ttukttak_v3/model/place.dart';
+import 'package:yeohaeng_ttukttak_v3/model/place_model.dart';
 
 class PlaceListResponse extends Equatable {
 
   final String message;
 
-  final List<Place> places;
+  final List<PlaceModel> places;
   
   const PlaceListResponse({
     required this.message,
@@ -19,7 +19,7 @@ class PlaceListResponse extends Equatable {
 
   PlaceListResponse copyWith({
     String? message,
-    List<Place>? places,
+    List<PlaceModel>? places,
   }) {
     return PlaceListResponse(
       message: message ?? this.message,
@@ -37,7 +37,7 @@ class PlaceListResponse extends Equatable {
   factory PlaceListResponse.fromMap(Map<String, dynamic> map) {
     return PlaceListResponse(
       message: map['message'] ?? '',
-      places: List<Place>.from(map['places']?.map((x) => Place.fromMap(x))),
+      places: List<PlaceModel>.from(map['places']?.map((x) => PlaceModel.fromMap(x))),
     );
   }
 
