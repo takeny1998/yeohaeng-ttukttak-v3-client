@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:yeohaeng_ttukttak_v3/view/material_sheet_view.dart';
 
-class MaterialBottomSheet extends StatefulWidget {
-  final Widget header;
-  final Widget background;
-  final Widget content;
+class MaterialBottomSheet extends StatefulWidget implements MaterialSheetView {
+  @override
+  final MaterialSheetHeaderBuilder headerBuilder;
+  @override
+  final MaterialSheetListContent content;
+  @override
+  final MaterialSheetBackgroundBuilder backgroundBuilder;
 
-  const MaterialBottomSheet(
-      {super.key,
-      required this.header,
-      required this.background,
-      required this.content});
+  const MaterialBottomSheet({
+    super.key,
+    required this.headerBuilder,
+    required this.content,
+    required this.backgroundBuilder,
+  });
 
   @override
   State<MaterialBottomSheet> createState() => _MaterialBottomSheetState();
@@ -23,9 +28,12 @@ class _MaterialBottomSheetState extends State<MaterialBottomSheet> {
 
   static const double maxWidth = 640.0;
 
+  double sheetHeight = 0.0;
+
   int index = 1;
 
   bool isAnimating = false;
+  bool isContentScrolled = false;
 
   @override
   void initState() {
@@ -49,93 +57,123 @@ class _MaterialBottomSheetState extends State<MaterialBottomSheet> {
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: [
-        widget.background,
+        widget.backgroundBuilder(sheetHeight),
         AnimatedContainer(
             duration: const Duration(milliseconds: 250),
             color: isFullyExpanded ? surface : Colors.transparent),
         Column(
           children: [
-            widget.header,
+            widget.headerBuilder(isFullyExpanded,
+                scrollController.hasClients && scrollController.offset > 0),
             Expanded(
               child: LayoutBuilder(builder: (context, constraints) {
-                final BoxConstraints(maxWidth: width, :maxHeight) = constraints;
+                final BoxConstraints(maxWidth: width, maxHeight: height) =
+                    constraints;
                 final EdgeInsets(:top) = MediaQuery.of(context).padding;
                 final bool hasMaxWidth = width > maxWidth;
 
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                sheetHeight = (height - top) * positions[index];
+                return Stack(
+                  alignment: AlignmentDirectional.bottomCenter,
                   children: [
-                  AnimatedContainer(
-                    onEnd: () async {
-                      await Future.delayed(const Duration(milliseconds: 100));
-                      setState(() => isAnimating = false);
-                    },
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                    width: double.maxFinite,
-                    height: (maxHeight - top) * positions[index],
-                    margin: hasMaxWidth
-                        ? const EdgeInsets.fromLTRB(56.0, 0.0, 56.0, 0.0)
-                        : null,
-                    constraints: const BoxConstraints(
-                        maxWidth: maxWidth, minHeight: 48.0),
-                    child: GestureDetector(
-                      onVerticalDragUpdate: (details) {
-                        if (isAnimating || index == positions.length - 1) {
-                          return;
-                        }
-
-                        final bool isScrollingDown = details.delta.dy > 0.0;
-
-                        setState(() {
-                          if (isScrollingDown && index > 0) {
-                            index--;
-                            isAnimating = true;
-                          } else if (!isScrollingDown &&
-                              index < positions.length - 1) {
-                            index++;
-                            isAnimating = true;
-                          }
-                        });
+                    AnimatedContainer(
+                      onEnd: () async {
+                        await Future.delayed(const Duration(milliseconds: 100));
+                        setState(() => isAnimating = false);
                       },
-                      child: NotificationListener<ScrollNotification>(
-                        onNotification: (ScrollNotification notification) {
-                          if (isAnimating || index != positions.length - 1) {
-                            return false;
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                      width: double.maxFinite,
+                      height: sheetHeight,
+                      margin: hasMaxWidth
+                          ? const EdgeInsets.fromLTRB(56.0, 0.0, 56.0, 0.0)
+                          : null,
+                      constraints: BoxConstraints(
+                          maxWidth: maxWidth,
+                          minHeight: 48.0,
+                          maxHeight: height),
+                      decoration: BoxDecoration(
+                        color: surface,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(28.0),
+                            topRight: Radius.circular(28.0),
+                        ),
+                        boxShadow: !isFullyExpanded ? [
+                          BoxShadow(
+                            offset: const Offset(0, 4),
+                            blurRadius: 8.0,
+                            spreadRadius: 0.0,
+                            color: Colors.black.withValues(alpha: 0.15)
+                          ),
+                          BoxShadow(
+                            offset: const Offset(0, 1),
+                            blurRadius: 3.0,
+                            spreadRadius: 0.0,
+                            color: Colors.black.withValues(alpha: 0.15)
+                          ),
+                        ] : null
+                      ),
+                      child: GestureDetector(
+                        onVerticalDragUpdate: (details) {
+                          if (isAnimating || index == positions.length - 1) {
+                            return;
                           }
 
-                          final ScrollDirection direction =
-                              scrollController.position.userScrollDirection;
-
-                          if (direction != ScrollDirection.forward) {
-                            return false;
-                          }
-                          if (scrollController.offset > 0.0) return false;
+                          final bool isScrollingDown = details.delta.dy > 0.0;
 
                           setState(() {
-                            index--;
-                            isAnimating = true;
+                            if (isScrollingDown && index > 0) {
+                              index--;
+                              isAnimating = true;
+                            } else if (!isScrollingDown &&
+                                index < positions.length - 1) {
+                              index++;
+                              isAnimating = true;
+                            }
                           });
-
-                          return false;
                         },
-                        child: SingleChildScrollView(
-                          controller: scrollController,
-                          physics: isFullyExpanded
-                              ? const BouncingScrollPhysics()
-                              : const NeverScrollableScrollPhysics(),
-                          child: Column(
-                            children: [
-                              Container(
+                        child: NotificationListener<ScrollNotification>(
+                          onNotification: (ScrollNotification notification) {
+                            // 본문 스크롤 여부를 업데이트
+                            bool isContentScrolled =
+                                scrollController.offset > 0.0;
+
+                            if (this.isContentScrolled != isContentScrolled) {
+                              setState(() =>
+                                  this.isContentScrolled = isContentScrolled);
+                            }
+
+                            // 위로 끝까지 스크롤 시 시트 축소
+                            if (isAnimating || index != positions.length - 1) {
+                              return false;
+                            }
+
+                            final ScrollDirection direction =
+                                scrollController.position.userScrollDirection;
+
+                            if (direction != ScrollDirection.forward) {
+                              return false;
+                            }
+                            if (scrollController.offset > 0.0) return false;
+
+                            setState(() {
+                              index--;
+                              isAnimating = true;
+                            });
+
+                            return false;
+                          },
+                          child: CustomScrollView(
+                            controller: scrollController,
+                            physics: isFullyExpanded
+                                ? const BouncingScrollPhysics()
+                                : const NeverScrollableScrollPhysics(),
+                            slivers: [
+                              SliverToBoxAdapter(
+                                  child: Container(
                                 width: double.infinity,
                                 padding: const EdgeInsets.only(
                                     top: 22.0, bottom: 22.0),
-                                decoration: BoxDecoration(
-                                  color: surface,
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(28.0),
-                                      topRight: Radius.circular(28.0)),
-                                ),
                                 child: Center(
                                   child: Container(
                                     width: 32.0,
@@ -148,15 +186,18 @@ class _MaterialBottomSheetState extends State<MaterialBottomSheet> {
                                             BorderRadius.circular(16.0)),
                                   ),
                                 ),
-                              ),
-                              widget.content,
+                              )),
+                              SliverToBoxAdapter(child: widget.content.title),
+                              SliverList.builder(
+                                  itemCount: widget.content.itemCount,
+                                  itemBuilder: widget.content.itemBuilder)
                             ],
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ]);
+                  ],
+                );
               }),
             ),
           ],
