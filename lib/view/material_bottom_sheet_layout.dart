@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:yeohaeng_ttukttak_v3/view/material_sheet_view.dart';
 
-class MaterialBottomSheet extends StatefulWidget implements MaterialSheetView {
+class MaterialBottomSheetLayout extends StatefulWidget implements MaterialSheetLayout {
   
   @override
   final MaterialSheetHeader header;
@@ -11,7 +11,7 @@ class MaterialBottomSheet extends StatefulWidget implements MaterialSheetView {
   @override
   final MaterialSheetBackgroundBuilder backgroundBuilder;
 
-  const MaterialBottomSheet({
+  const MaterialBottomSheetLayout({
     super.key,
     required this.header,
     required this.content,
@@ -19,10 +19,10 @@ class MaterialBottomSheet extends StatefulWidget implements MaterialSheetView {
   });
 
   @override
-  State<MaterialBottomSheet> createState() => _MaterialBottomSheetState();
+  State<MaterialBottomSheetLayout> createState() => _MaterialBottomSheetLayoutState();
 }
 
-class _MaterialBottomSheetState extends State<MaterialBottomSheet> {
+class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
   final ScrollController scrollController = ScrollController();
 
   final List<double> positions = [0.0, 0.5, 1.0];

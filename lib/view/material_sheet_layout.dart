@@ -30,14 +30,14 @@ typedef MaterialSheetBackgroundBuilder = Widget Function(
   double bottomSheetHeight,
 );
 
-abstract interface class MaterialSheetView {
+abstract interface class MaterialSheetLayout {
   final MaterialSheetHeader header;
 
   final MaterialSheetListContent content;
 
   final MaterialSheetBackgroundBuilder backgroundBuilder;
 
-  MaterialSheetView({
+  MaterialSheetLayout({
     required this.header,
     required this.content,
     required this.backgroundBuilder,

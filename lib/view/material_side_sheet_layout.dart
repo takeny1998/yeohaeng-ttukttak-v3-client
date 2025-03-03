@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yeohaeng_ttukttak_v3/view/material_sheet_view.dart';
 
 class MaterialSideSheetLayout extends StatelessWidget
-    implements MaterialSheetView {
+    implements MaterialSheetLayout {
   @override
   final MaterialSheetHeader header;
   @override

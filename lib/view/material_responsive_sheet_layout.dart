@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:yeohaeng_ttukttak_v3/view/material_bottom_sheet.dart';
-import 'package:yeohaeng_ttukttak_v3/view/material_sheet_view.dart';
+import 'package:yeohaeng_ttukttak_v3/view/material_bottom_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/view/material_sheet_layout.dart';
 import 'package:yeohaeng_ttukttak_v3/view/material_side_sheet_layout.dart';
 
-class SheetLayout extends StatelessWidget implements MaterialSheetView {
+class MaterialResponsiveSheetLayout extends StatelessWidget implements MaterialSheetLayout {
   @override
   final MaterialSheetHeader header;
 
@@ -13,7 +13,7 @@ class SheetLayout extends StatelessWidget implements MaterialSheetView {
   @override
   final MaterialSheetBackgroundBuilder backgroundBuilder;
 
-  const SheetLayout(
+  const MaterialResponsiveSheetLayout(
       {super.key,
       required this.header,
       required this.content,

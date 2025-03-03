@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yeohaeng_ttukttak_v3/view/material_search_bar.dart';
-import 'package:yeohaeng_ttukttak_v3/view/material_sheet_view.dart';
+import 'package:yeohaeng_ttukttak_v3/view/material_sheet_layout.dart';
 import 'package:yeohaeng_ttukttak_v3/view/sheet_layout.dart';
 
 class ExplorePage extends ConsumerWidget {
@@ -22,7 +22,7 @@ class ExplorePage extends ConsumerWidget {
     final TextTheme(:titleLarge, :bodyMedium) = Theme.of(context).textTheme;
 
     return Scaffold(
-      body: SheetLayout(
+      body: MaterialResponsiveSheetLayout(
         header: MaterialSheetHeader(
             headerBuilder: (isBottomSheetExpanded) {
               return AnimatedSwitcher(
