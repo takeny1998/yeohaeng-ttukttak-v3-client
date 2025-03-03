@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
-import 'package:yeohaeng_ttukttak_v3/data/dto/place_list_response.dart';
+import 'package:yeohaeng_ttukttak_v3/data/repository/response/place_list_response.dart';
 
 class PlaceRepository {
   final String baseUrl;
