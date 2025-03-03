@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yeohaeng_ttukttak_v3/data/dto/place_list_response.dart';
 import 'package:yeohaeng_ttukttak_v3/data/repository/place_repository.dart';
-import 'package:yeohaeng_ttukttak_v3/dto/image_dto.dart';
-import 'package:yeohaeng_ttukttak_v3/dto/place_dto.dart';
-import 'package:yeohaeng_ttukttak_v3/model/place_model.dart';
-import 'package:yeohaeng_ttukttak_v3/service/image_url_service.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/dto/image_dto.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/dto/place_dto.dart';
+import 'package:yeohaeng_ttukttak_v3/domain/model/place_model.dart';
+import 'package:yeohaeng_ttukttak_v3/domain/service/image_url_service.dart';
 
 class ExploreProvider extends AsyncNotifier<List<PlaceDto>> {
   late final ImageUrlService _imageUrlService;

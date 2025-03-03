@@ -1,8 +1,8 @@
 
 import 'package:go_router/go_router.dart';
-import 'package:yeohaeng_ttukttak_v3/view/explore/explore_page.dart';
-import 'package:yeohaeng_ttukttak_v3/view/home/home_page.dart';
-import 'package:yeohaeng_ttukttak_v3/view/sample/sample_page.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/page/explore_page.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/page/home_page.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/page/sample_page.dart';
 
 final goRouter = GoRouter(routes: [
   GoRoute(path: '/', builder: (_, __) => const HomePage()),

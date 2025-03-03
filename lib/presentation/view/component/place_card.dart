@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:yeohaeng_ttukttak_v3/dto/image_dto.dart';
-import 'package:yeohaeng_ttukttak_v3/dto/place_dto.dart';
-import 'package:yeohaeng_ttukttak_v3/view/material_carosel.dart';
-import 'package:yeohaeng_ttukttak_v3/view/fade_in_failover_image.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/dto/image_dto.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/dto/place_dto.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/component/material_carosel.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/component/fade_in_failover_image.dart';
 
 class PlaceCard extends StatelessWidget {
   final PlaceDto place;

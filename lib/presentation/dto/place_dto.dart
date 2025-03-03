@@ -1,10 +1,8 @@
 
 
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
 
-import 'package:yeohaeng_ttukttak_v3/dto/image_dto.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/dto/image_dto.dart';
 
 class PlaceDto extends Equatable {
 

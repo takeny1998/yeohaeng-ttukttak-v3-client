@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:yeohaeng_ttukttak_v3/dto/image_dto.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/dto/image_dto.dart';
 
 class FadeInFailoverImage extends StatelessWidget {
   final ImageDto image;

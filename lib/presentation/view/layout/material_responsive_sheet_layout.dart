@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:yeohaeng_ttukttak_v3/view/material_bottom_sheet_layout.dart';
-import 'package:yeohaeng_ttukttak_v3/view/material_sheet_layout.dart';
-import 'package:yeohaeng_ttukttak_v3/view/material_side_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_bottom_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_side_sheet_layout.dart';
 
 class MaterialResponsiveSheetLayout extends StatelessWidget
     implements MaterialSheetLayout {

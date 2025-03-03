@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:yeohaeng_ttukttak_v3/dto/image_dto.dart';
-import 'package:yeohaeng_ttukttak_v3/dto/place_dto.dart';
-import 'package:yeohaeng_ttukttak_v3/model/image_model.dart';
-import 'package:yeohaeng_ttukttak_v3/model/place_model.dart';
-import 'package:yeohaeng_ttukttak_v3/view/explore/explore_provider.dart';
-import 'package:yeohaeng_ttukttak_v3/view/explore/place_card.dart';
-import 'package:yeohaeng_ttukttak_v3/view/material_search_bar.dart';
-import 'package:yeohaeng_ttukttak_v3/view/material_sheet_layout.dart';
-import 'package:yeohaeng_ttukttak_v3/view/material_responsive_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/dto/image_dto.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/dto/place_dto.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/provider/explore_provider.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/component/place_card.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/component/material_search_bar.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_responsive_sheet_layout.dart';
 
 class ExplorePage extends ConsumerWidget {
   const ExplorePage({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:yeohaeng_ttukttak_v3/view/sample/sample_provider.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/provider/sample_provider.dart';
 
 class SamplePage extends ConsumerWidget {
   const SamplePage({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:yeohaeng_ttukttak_v3/view/material_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_sheet_layout.dart';
 
 class MaterialSideSheetLayout extends StatelessWidget
     implements MaterialSheetLayout {
