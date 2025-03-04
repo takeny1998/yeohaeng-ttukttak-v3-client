@@ -26,4 +26,4 @@ jobs:
 
       - name: Publish to remote server
         working-directory: build
-        run: rsync -r web ${{ secrets.REMOTE_SERVER_USERNAME }}@${{ secrets.REMOTE_SERVER_HOST }}:/home/yeohaeng_ttukttak/web
+        run: rsync -r web ${{ secrets.REMOTE_SERVER_USERNAME }}@${{ secrets.REMOTE_SERVER_HOST }}:/home/yeohaeng_ttukttak
