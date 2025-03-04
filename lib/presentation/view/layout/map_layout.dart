@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
@@ -26,14 +25,6 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
     super.dispose();
   }
 
-  Future<void> loadFont() async {
-    final bytesFuture = rootBundle.load('fonts/NotoSansKR-Medium.ttf');
-    final fontLoader = FontLoader('NotoSansKR-Medium');
-    fontLoader.addFont(bytesFuture);
-
-    await fontLoader.load();
-  }
-
   Marker buildMarker(MapMarkerDto dto) {
     return Marker(
       width: 18.0,
@@ -52,31 +43,23 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
   }
 
   Marker buildLabel(MapMarkerDto dto) {
-    const textStyle = TextStyle(
-      fontFamily: 'NotoSansKR-Medium',
-      fontSize: 14.0,
-      color: Color(0XFF49454F),
+    final Text text = Text(
+      dto.name,
+      style: const TextStyle(
+        fontSize: 14.0,
+        color: Color(0XFF49454F),
+      ),
     );
-
-    final TextPainter textPainter = TextPainter(
-      text: TextSpan(text: dto.name, style: textStyle),
-      textDirection: TextDirection.ltr,
-      textScaler: MediaQuery.of(context).textScaler,
-    );
-
-    textPainter.layout(minWidth: 0, maxWidth: 160.0);
-
-    final Text text = Text(dto.name, style: textStyle);
 
     return Marker(
-      width: textPainter.size.width + 9.0, // 외곽선을 위한 패딩
-      height: textPainter.size.height + 9.0,
+      width: 160.0,
+      height: 28.0,
       point: LatLng(dto.latitude, dto.longitude),
       alignment: Alignment.bottomCenter,
       child: Container(
         padding: const EdgeInsets.only(top: 9.0),
         constraints: const BoxConstraints(maxWidth: 160.0),
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.topCenter,
         child: Stack(
           children: [
             Text(text.data!,
@@ -97,6 +80,7 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
   Widget build(BuildContext context) {
     final tileUrl = ref.watch(tileUrlProvider);
     final markers = ref.watch(mapMarkerProvider);
+    final initialLocation = ref.read(mapLocationProvider);
 
     ref.listen(mapMarkerProvider, (prev, next) {
       if (prev == next) return;
@@ -110,8 +94,9 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
     return FlutterMap(
       mapController: mapController,
       options: MapOptions(
-          initialCenter: const LatLng(37.5665, 126.9780),
-          initialZoom: 13.0,
+          initialCenter:
+              LatLng(initialLocation.latitude, initialLocation.longitude),
+          initialZoom: initialLocation.zoom,
           keepAlive: true,
           onPositionChanged: (camera, hasGesture) => ref
               .read(mapLocationProvider.notifier)
@@ -124,15 +109,7 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
             urlTemplate: tileUrl,
             tileProvider: CancellableNetworkTileProvider()),
         MarkerLayer(markers: markers.map((dto) => buildMarker(dto)).toList()),
-        FutureBuilder(
-            future: loadFont(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return MarkerLayer(
-                    markers: markers.map((dto) => buildLabel(dto)).toList());
-              }
-              return const SizedBox();
-            }),
+        MarkerLayer(markers: markers.map((dto) => buildLabel(dto)).toList()),
       ],
     );
   }
