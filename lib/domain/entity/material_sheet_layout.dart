@@ -26,22 +26,18 @@ class MaterialSheetContent  {
 
 }
 
-typedef MaterialSheetBackgroundBuilder = Widget Function(
-  double bottomSheetHeight,
-);
-
 abstract interface class MaterialSheetLayout {
 
   final MaterialSheetHeader header;
   final MaterialSheetContent content;
-  final MaterialSheetBackgroundBuilder backgroundBuilder;
+  final Widget background;
 
   final bool isLoading;
 
   MaterialSheetLayout({
     required this.header,
     required this.content,
-    required this.backgroundBuilder,
+    required this.background,
     required this.isLoading,
   });
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/domain/entity/material_sheet_layout.dart';
 
 class MaterialSideSheetLayout extends StatelessWidget
     implements MaterialSheetLayout {
@@ -9,7 +9,7 @@ class MaterialSideSheetLayout extends StatelessWidget
   @override
   final MaterialSheetContent content;
   @override
-  final MaterialSheetBackgroundBuilder backgroundBuilder;
+  final Widget background;
   @override
   final bool isLoading;
 
@@ -17,7 +17,7 @@ class MaterialSideSheetLayout extends StatelessWidget
       {super.key,
       required this.header,
       required this.content,
-      required this.backgroundBuilder,
+      required this.background,
       required this.isLoading});
 
   @override
@@ -31,18 +31,17 @@ class MaterialSideSheetLayout extends StatelessWidget
     return Row(
       children: [
         Expanded(
-            child: LayoutBuilder(
-                builder: (context, constraints) => Stack(children: [
-                      backgroundBuilder(constraints.maxHeight),
-                      Column(
-                        children: [
-                          Container(
-                              width: double.maxFinite,
-                              alignment: Alignment.center,
-                              child: header.headerBuilder(false)),
-                        ],
-                      ),
-                    ]))),
+            child: Stack(children: [
+          background,
+          Column(
+            children: [
+              Container(
+                  width: double.maxFinite,
+                  alignment: Alignment.center,
+                  child: header.headerBuilder(false)),
+            ],
+          ),
+        ])),
         Container(
           width: 400.0,
           height: double.maxFinite,

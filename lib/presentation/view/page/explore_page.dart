@@ -7,7 +7,7 @@ import 'package:yeohaeng_ttukttak_v3/presentation/provider/explore_provider.dart
 import 'package:yeohaeng_ttukttak_v3/presentation/view/component/place_card.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/component/material_search_bar.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/map_layout.dart';
-import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/domain/entity/material_sheet_layout.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_responsive_sheet_layout.dart';
 
 class ExplorePage extends ConsumerWidget {
@@ -126,9 +126,7 @@ class ExplorePage extends ConsumerWidget {
             title: titleWidget,
             itemCount: places.length,
             itemBuilder: (context, index) => PlaceCard(place: places[index])),
-        backgroundBuilder: (double bottomSheetHeight) {
-          return const MapLayout();
-        },
+        background: const MapLayout()
       ),
     );
   }

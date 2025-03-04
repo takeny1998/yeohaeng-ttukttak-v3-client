@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yeohaeng_ttukttak_v3/domain/entity/material_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/provider/material_layout_provider.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_bottom_sheet_layout.dart';
-import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/domain/entity/material_sheet_layout.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_side_sheet_layout.dart';
 
-class MaterialResponsiveSheetLayout extends StatelessWidget
+class MaterialResponsiveSheetLayout extends ConsumerWidget
     implements MaterialSheetLayout {
   @override
   final MaterialSheetHeader header;
@@ -12,7 +15,7 @@ class MaterialResponsiveSheetLayout extends StatelessWidget
   final MaterialSheetContent content;
 
   @override
-  final MaterialSheetBackgroundBuilder backgroundBuilder;
+  final Widget background;
 
   @override
   final bool isLoading;
@@ -21,30 +24,33 @@ class MaterialResponsiveSheetLayout extends StatelessWidget
     super.key,
     required this.header,
     required this.content,
-    required this.backgroundBuilder,
+    required this.background,
     required this.isLoading,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      final BoxConstraints(:maxWidth, :maxHeight) = constraints;
-      final bool hasSideSheet = maxWidth >= 1200;
+  Widget build(BuildContext context, WidgetRef ref) {
 
-      return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 200),
-        child: hasSideSheet
-            ? MaterialSideSheetLayout(
-                header: header,
-                content: content,
-                backgroundBuilder: backgroundBuilder,
-                isLoading: isLoading)
-            : MaterialBottomSheetLayout(
-                header: header,
-                content: content,
-                backgroundBuilder: backgroundBuilder,
-                isLoading: isLoading              ),
-      );
-    });
+    final layout = ref.watch(materialLayoutProvider);
+
+    final int index = layout.layout < MaterialLayout.large.layout ? 0 : 1;
+
+    return IndexedStack(
+      index: index,
+      children: [
+        MaterialBottomSheetLayout(
+          header: header,
+          content: content,
+          background: background,
+          isLoading: isLoading,
+        ),
+        MaterialSideSheetLayout(
+          header: header,
+          content: content,
+          background: background,
+          isLoading: isLoading,
+        ),
+      ],
+    );
   }
 }

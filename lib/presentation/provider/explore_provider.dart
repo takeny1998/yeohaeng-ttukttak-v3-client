@@ -56,3 +56,4 @@ class ExploreProvider extends AsyncNotifier<List<PlaceDto>> {
 
 final exploreProvider =
     AsyncNotifierProvider<ExploreProvider, List<PlaceDto>>(ExploreProvider.new);
+
