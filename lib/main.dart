@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -22,11 +23,10 @@ class _MainAppState extends ConsumerState<MainApp> with WidgetsBindingObserver {
     Future.microtask(() {
       ref
           .read(materialLayoutProvider.notifier)
-          .updateLayout(MediaQuery.of(context).size.width);
+          .updateLayout(getWindowWidth());
     });
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
   }
 
   @override
@@ -37,10 +37,12 @@ class _MainAppState extends ConsumerState<MainApp> with WidgetsBindingObserver {
 
   @override
   void didChangeMetrics() {
-    ref
-        .read(materialLayoutProvider.notifier)
-        .updateLayout(MediaQuery.of(context).size.width);
-    super.didChangeMetrics();
+
+    ref.read(materialLayoutProvider.notifier).updateLayout(getWindowWidth());
+  }
+
+  double getWindowWidth() {
+    return window.physicalSize.width / window.devicePixelRatio;
   }
 
   @override
