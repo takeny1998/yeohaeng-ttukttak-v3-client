@@ -17,6 +17,7 @@ dependencies:
   skeletonizer: ^1.4.3
   flutter_map: ^8.1.0
   flutter_map_cancellable_tile_provider: ^3.1.0
+  latlong2: ^0.9.1
 
 dev_dependencies:
   flutter_test:

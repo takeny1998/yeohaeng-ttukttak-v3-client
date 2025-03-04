@@ -1,12 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:yeohaeng_ttukttak_v3/presentation/dto/map_marker_dto.dart';
+
 final tileUrlProvider = Provider<String>((ref) {
   return 'https://yeohaeng-ttukttak.com/map/styles/basic/512/{z}/{x}/{y}.png';
 });
 
 
-class MapState extends Equatable {
+class MapLocation extends Equatable {
 
   final double longitude;
 
@@ -14,18 +16,18 @@ class MapState extends Equatable {
 
   final double zoom;
 
-  const MapState({
+  const MapLocation({
     required this.longitude,
     required this.latitude,
     required this.zoom,
   });
 
-  MapState copyWith({
+  MapLocation copyWith({
     double? longitude,
     double? latitude,
     double? zoom,
   }) {
-    return MapState(
+    return MapLocation(
       longitude: longitude ?? this.longitude,
       latitude: latitude ?? this.latitude,
       zoom: zoom ?? this.zoom,
@@ -36,11 +38,11 @@ class MapState extends Equatable {
   List<Object> get props => [longitude, latitude, zoom];
 }
 
-class MapStateNotifier extends Notifier<MapState> {
+class MapLocationNotifier extends Notifier<MapLocation> {
   
   @override
-  MapState build() {
-    return const MapState(longitude: 126.9780, latitude: 37.5665, zoom: 15.0);
+  MapLocation build() {
+    return const MapLocation(longitude: 126.9780, latitude: 37.5665, zoom: 15.0,);
   }
 
   void updateMapState({
@@ -55,6 +57,19 @@ class MapStateNotifier extends Notifier<MapState> {
     );
   }
 
+
 }
 
-final mapStateProvider = NotifierProvider<MapStateNotifier, MapState>(MapStateNotifier.new);
+class MapMarkerProvider extends Notifier<List<MapMarkerDto>> {
+  @override
+  List<MapMarkerDto> build() {
+    return [];
+  }
+  void updateMarkers(List<MapMarkerDto> markers) {
+    state = markers;
+  }
+}
+
+final mapLocationProvider = NotifierProvider<MapLocationNotifier, MapLocation>(MapLocationNotifier.new);
+
+final mapMarkerProvider = NotifierProvider<MapMarkerProvider, List<MapMarkerDto>>(MapMarkerProvider.new);
