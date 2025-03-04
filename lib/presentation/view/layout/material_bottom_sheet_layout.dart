@@ -30,7 +30,7 @@ class MaterialBottomSheetLayout extends StatefulWidget
 class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
   final ScrollController scrollController = ScrollController();
 
-  final List<double> positions = [0.0, 0.5, 1.0];
+  final List<double> positions = [0.0, 0.4, 1.0];
 
   static const double maxWidth = 640.0;
   static const double scrollThreshold = -32.0;
@@ -64,9 +64,11 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
       alignment: AlignmentDirectional.bottomCenter,
       children: [
         widget.backgroundBuilder(sheetHeight),
-        AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            color: isFullyExpanded ? surface : Colors.transparent),
+        IgnorePointer(
+            ignoring: !isFullyExpanded, // 완전 확장되지 않은 경우만 터치 무시
+            child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                color: isFullyExpanded ? surface : Colors.transparent)),
         Column(
           children: [
             AnimatedCrossFade(
@@ -190,7 +192,8 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
                             ),
                             child: ListView(
                               controller: scrollController,
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 24.0),
                               physics: isFullyExpanded
                                   ? const BouncingScrollPhysics()
                                   : const NeverScrollableScrollPhysics(),
@@ -198,7 +201,8 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
                                 AnimatedCrossFade(
                                     firstChild: Container(
                                         width: double.infinity,
-                                        padding: const EdgeInsets.only(bottom: 22.0),
+                                        padding:
+                                            const EdgeInsets.only(bottom: 22.0),
                                         child: Center(
                                             child: Container(
                                           width: 32.0,
@@ -221,10 +225,9 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
                                 for (int i = 0;
                                     i < widget.content.itemCount;
                                     i++) ...[
-
                                   widget.content.itemBuilder(context, i),
                                   const SizedBox(height: 24.0),
-                                    ]
+                                ]
                               ],
                             ),
                           ),
