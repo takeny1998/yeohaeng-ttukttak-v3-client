@@ -11,7 +11,7 @@ jobs:
     steps:
 
       - name: Install rsync
-        run: apt update && apt -yq install rsync openssh-client
+        run: sudo apt update && sudo apt -yq install rsync openssh-client
 
       - name: Checkout Repository
         uses: actions/checkout@v4
