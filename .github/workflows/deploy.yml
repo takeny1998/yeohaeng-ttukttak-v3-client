@@ -38,8 +38,9 @@ jobs:
       - name: GitHub SSH known hosts
         shell: bash
         run: |
-          sudo ssh-keyscan ${{ secrets.REMOTE_SERVER_HOST }} > /etc/ssh/ssh_known_hosts || exit 1
-          exit 0
+          mkdir -p ~/.ssh/ && touch ~/.ssh/known_hosts
+          sudo ssh-keyscan ${{ secrets.REMOTE_SERVER_HOST }} > ~/.ssh/known_hosts
+          
 
       - name: Publish to remote server
         working-directory: build
