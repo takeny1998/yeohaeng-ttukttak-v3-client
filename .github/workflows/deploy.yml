@@ -9,9 +9,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh/ && touch ~/.ssh/known_hosts
+          
+          install -m 600 -D /dev/null ~/.ssh/id_ed25519
+          echo "${{ secrets.SSH_PRIVATE_KEY }}"" > ~/.ssh/id_ed25519
 
-      - name: Install rsync
-        run: sudo apt update && sudo apt -yq install rsync openssh-client
+          ssh-keyscan ${{ secrets.REMOTE_SERVER_HOST }} > ~/.ssh/known_hosts
 
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -29,18 +34,6 @@ jobs:
       
       - name: Build Flutter Web
         run: flutter build web --wasm --release
-
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: GitHub SSH known hosts
-        shell: bash
-        run: |
-          mkdir -p ~/.ssh/ && touch ~/.ssh/known_hosts
-          sudo ssh-keyscan ${{ secrets.REMOTE_SERVER_HOST }} > ~/.ssh/known_hosts
-          
 
       - name: Publish to remote server
         working-directory: build
