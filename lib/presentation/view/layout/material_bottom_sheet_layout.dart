@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/domain/entity/material_sheet_layout.dart';
 
 class MaterialBottomSheetLayout extends StatefulWidget
     implements MaterialSheetLayout {
+
   @override
   final MaterialSheetHeader header;
   @override
   final MaterialSheetContent content;
   @override
-  final MaterialSheetBackgroundBuilder backgroundBuilder;
+  final Widget background;
   @override
   final bool isLoading;
 
@@ -18,7 +19,7 @@ class MaterialBottomSheetLayout extends StatefulWidget
     super.key,
     required this.header,
     required this.content,
-    required this.backgroundBuilder,
+    required this.background,
     required this.isLoading,
   });
 
@@ -30,7 +31,7 @@ class MaterialBottomSheetLayout extends StatefulWidget
 class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
   final ScrollController scrollController = ScrollController();
 
-  final List<double> positions = [0.0, 0.5, 1.0];
+  final List<double> positions = [0.0, 0.4, 1.0];
 
   static const double maxWidth = 640.0;
   static const double scrollThreshold = -32.0;
@@ -63,10 +64,12 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: [
-        widget.backgroundBuilder(sheetHeight),
-        AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            color: isFullyExpanded ? surface : Colors.transparent),
+        widget.background,
+        IgnorePointer(
+            ignoring: !isFullyExpanded, // 완전 확장되지 않은 경우만 터치 무시
+            child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                color: isFullyExpanded ? surface : Colors.transparent)),
         Column(
           children: [
             AnimatedCrossFade(
@@ -190,7 +193,8 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
                             ),
                             child: ListView(
                               controller: scrollController,
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 24.0),
                               physics: isFullyExpanded
                                   ? const BouncingScrollPhysics()
                                   : const NeverScrollableScrollPhysics(),
@@ -198,7 +202,8 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
                                 AnimatedCrossFade(
                                     firstChild: Container(
                                         width: double.infinity,
-                                        padding: const EdgeInsets.only(bottom: 22.0),
+                                        padding:
+                                            const EdgeInsets.only(bottom: 22.0),
                                         child: Center(
                                             child: Container(
                                           width: 32.0,
@@ -221,10 +226,9 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
                                 for (int i = 0;
                                     i < widget.content.itemCount;
                                     i++) ...[
-
                                   widget.content.itemBuilder(context, i),
                                   const SizedBox(height: 24.0),
-                                    ]
+                                ]
                               ],
                             ),
                           ),
