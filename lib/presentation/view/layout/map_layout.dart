@@ -91,6 +91,9 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
           initialCenter:
               LatLng(initialLocation.latitude, initialLocation.longitude),
           initialZoom: initialLocation.zoom,
+          interactionOptions: const InteractionOptions(
+            flags: InteractiveFlag.pinchZoom | InteractiveFlag.drag | InteractiveFlag.doubleTapZoom
+          ),
           keepAlive: true,
           onPositionChanged: (camera, hasGesture) {
             if (!hasGesture) return;
