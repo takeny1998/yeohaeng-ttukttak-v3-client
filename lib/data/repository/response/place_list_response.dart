@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-import 'package:yeohaeng_ttukttak_v3/domain/model/place_model.dart';
+import 'package:yeohaeng_ttukttak_v3/data/model/place_model.dart';
 
 class PlaceListResponse extends Equatable {
 

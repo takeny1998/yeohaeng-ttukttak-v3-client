@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:yeohaeng_ttukttak_v3/domain/entity/material_sheet_layout.dart';
 
 class MaterialSideSheetLayout extends StatelessWidget
     implements MaterialSheetLayout {
   @override
   final MaterialSheetHeader header;
+
   @override
-  final MaterialSheetContent content;
+  final Widget title;
+
+  @override
+  final Widget content;
+
   @override
   final Widget background;
-  @override
-  final bool isLoading;
 
-  const MaterialSideSheetLayout(
-      {super.key,
-      required this.header,
-      required this.content,
-      required this.background,
-      required this.isLoading});
+  const MaterialSideSheetLayout({
+    super.key,
+    required this.header,
+    required this.title,
+    required this.content,
+    required this.background,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,27 +50,14 @@ class MaterialSideSheetLayout extends StatelessWidget
           height: double.maxFinite,
           decoration: BoxDecoration(
               border: Border(left: BorderSide(color: outlineVariant))),
-          child: Skeletonizer(
-            enabled: isLoading,
-            enableSwitchAnimation: true,
-            switchAnimationConfig: const SwitchAnimationConfig(
-              duration: Duration(milliseconds: 500),
-            ),
-            effect: ShimmerEffect(
-              baseColor: surfaceContainer,
-              highlightColor: surfaceContainerHighest,
-            ),
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16.0, 24.0, 24.0, 24.0),
-              children: [
-                content.title,
-                const SizedBox(height: 16.0),
-                for (int i = 0; i < content.itemCount; i++) ...[
-                  content.itemBuilder(context, i),
-                  const SizedBox(height: 24.0),
-                ]
-              ],
-            ),
+          child: CustomScrollView(
+            slivers: [
+              const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
+              SliverToBoxAdapter(child: title),
+              const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
+              content,
+              const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
+            ],
           ),
         ),
       ],

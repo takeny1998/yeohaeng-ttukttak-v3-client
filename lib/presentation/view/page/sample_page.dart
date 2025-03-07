@@ -17,7 +17,7 @@ class SamplePage extends ConsumerWidget {
               itemBuilder: (context, index) => ListTile(
                     title: Text(places[index].name),
                     subtitle: Text(
-                        '${places[index].rating} / ${places[index].regionCode}'),
+                        '${places[index].rating} / ${places[index].region.name}'),
                   )),
           error: (error, stackTrace) { 
             debugPrintStack(stackTrace: stackTrace);
