@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import 'package:yeohaeng_ttukttak_v3/presentation/dto/image_dto.dart';
-import 'package:yeohaeng_ttukttak_v3/presentation/dto/place_dto.dart';
+import 'package:yeohaeng_ttukttak_v3/data/model/image_model.dart';
+import 'package:yeohaeng_ttukttak_v3/data/model/place_model.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/component/material_carosel.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/component/fade_in_failover_image.dart';
 
 class PlaceCard extends StatelessWidget {
-  final PlaceDto place;
+  final PlaceModel place;
 
   const PlaceCard({super.key, required this.place});
 
@@ -35,9 +34,8 @@ class PlaceCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: MaterialCarosel(
             children: [
-              for (final ImageDto image in place.images)
-                Skeleton.replace(
-                    child: FadeInFailoverImage(image: image))
+              for (final ImageModel image in place.images)
+              FadeInFailoverImage(image: image)
             ],
           )),
       ListTile(

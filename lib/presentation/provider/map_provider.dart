@@ -9,7 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yeohaeng_ttukttak_v3/data/model/region_model.dart';
 import 'package:yeohaeng_ttukttak_v3/data/repository/region_repository.dart';
 import 'package:yeohaeng_ttukttak_v3/data/repository/response/region_response.dart';
-import 'package:yeohaeng_ttukttak_v3/presentation/dto/map_marker_dto.dart';
 
 final tileUrlProvider = Provider<String>((ref) {
   return 'https://yeohaeng-ttukttak.com/map/styles/basic/512/{z}/{x}/{y}.png';
@@ -82,10 +81,12 @@ class MapLocationNotifier extends Notifier<MapLocation> {
 
   @override
   MapLocation build() {
+    print('build MapLocationProvider');
+
     ref.onDispose(_disposeTimer);
     return const MapLocation(
-        longitude: 126.9780,
-        latitude: 37.5665,
+        longitude: 127.492913,
+        latitude: 36.621087,
         zoom: 15.0,
         region: RegionModel(code: '4311100000', name: '청주시 상당구, 충청북도'));
   }
@@ -133,29 +134,3 @@ class MapLocationNotifier extends Notifier<MapLocation> {
 
 final mapLocationProvider =
     NotifierProvider<MapLocationNotifier, MapLocation>(MapLocationNotifier.new);
-
-class MapMarkerProvider extends Notifier<List<MapMarkerDto>> {
-  @override
-  List<MapMarkerDto> build() {
-    print('MapMarkerProvider build');
-    return [];
-  }
-
-  void updateMarkers(List<MapMarkerDto> markers) {
-    state = markers;
-  }
-}
-
-final mapMarkerProvider =
-    NotifierProvider<MapMarkerProvider, List<MapMarkerDto>>(
-        MapMarkerProvider.new);
-
-class MapPaddingNotifier extends Notifier<EdgeInsets> {
-  @override
-  EdgeInsets build() {
-    return EdgeInsets.zero;
-  }
-}
-
-final mapPaddingProvider =
-    NotifierProvider<MapPaddingNotifier, EdgeInsets>(MapPaddingNotifier.new);

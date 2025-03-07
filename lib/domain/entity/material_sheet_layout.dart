@@ -32,12 +32,9 @@ abstract interface class MaterialSheetLayout {
   final MaterialSheetContent content;
   final Widget background;
 
-  final bool isLoading;
-
   MaterialSheetLayout({
     required this.header,
     required this.content,
     required this.background,
-    required this.isLoading,
   });
 }

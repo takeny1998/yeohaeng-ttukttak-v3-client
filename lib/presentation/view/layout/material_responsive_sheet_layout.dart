@@ -17,15 +17,11 @@ class MaterialResponsiveSheetLayout extends ConsumerWidget
   @override
   final Widget background;
 
-  @override
-  final bool isLoading;
-
   const MaterialResponsiveSheetLayout({
     super.key,
     required this.header,
     required this.content,
     required this.background,
-    required this.isLoading,
   });
 
   @override
@@ -42,13 +38,11 @@ class MaterialResponsiveSheetLayout extends ConsumerWidget
           header: header,
           content: content,
           background: background,
-          isLoading: isLoading,
         ),
         MaterialSideSheetLayout(
           header: header,
           content: content,
           background: background,
-          isLoading: isLoading,
         ),
       ],
     );
