@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,8 +40,11 @@ class MapLocation extends Equatable {
 }
 
 class MapLocationNotifier extends Notifier<MapLocation> {
+  Timer? _timer;
+
   @override
   MapLocation build() {
+    ref.onDispose(_disposeTimer);
     return const MapLocation(
       longitude: 126.9780,
       latitude: 37.5665,
@@ -48,8 +53,27 @@ class MapLocationNotifier extends Notifier<MapLocation> {
   }
 
   void updateMapState({double? longitude, double? latitude, double? zoom}) {
-    state =
-        state.copyWith(longitude: longitude, latitude: latitude, zoom: zoom);
+    if (_timer != null) {
+      _disposeTimer();
+    }
+
+    _startTimer(() => state = state.copyWith(
+          longitude: longitude,
+          latitude: latitude,
+          zoom: zoom,
+        ));
+  }
+
+  void _startTimer(VoidCallback callback) {
+    _timer = Timer(const Duration(seconds: 2), () {
+      _disposeTimer();
+      callback.call();
+    });
+  }
+
+  void _disposeTimer() {
+    _timer?.cancel();
+    _timer = null;
   }
 }
 
