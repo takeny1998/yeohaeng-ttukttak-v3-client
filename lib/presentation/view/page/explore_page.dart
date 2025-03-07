@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:yeohaeng_ttukttak_v3/data/model/region_model.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/dto/image_dto.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/dto/place_dto.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/provider/explore_provider.dart';
@@ -33,7 +34,7 @@ class ExplorePage extends ConsumerWidget {
             (index) => PlaceDto(
                 id: index + 1,
                 name: BoneMock.name,
-                address: BoneMock.address,
+                region: RegionModel(code: BoneMock.subtitle, name: BoneMock.address),
                 longitude: 0.0,
                 latitude: 0.0,
                 rating: 4.5,

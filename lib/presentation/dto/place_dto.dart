@@ -1,7 +1,6 @@
-
-
 import 'package:equatable/equatable.dart';
 
+import 'package:yeohaeng_ttukttak_v3/data/model/region_model.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/dto/image_dto.dart';
 
 class PlaceDto extends Equatable {
@@ -10,7 +9,7 @@ class PlaceDto extends Equatable {
 
   final String name;
 
-  final String address;
+  final RegionModel region;
 
   final double longitude;
 
@@ -25,7 +24,7 @@ class PlaceDto extends Equatable {
   const PlaceDto({
     required this.id,
     required this.name,
-    required this.address,
+    required this.region,
     required this.longitude,
     required this.latitude,
     required this.rating,
@@ -38,7 +37,7 @@ class PlaceDto extends Equatable {
   PlaceDto copyWith({
     int? id,
     String? name,
-    String? address,
+    RegionModel? region,
     double? longitude,
     double? latitude,
     double? rating,
@@ -48,7 +47,7 @@ class PlaceDto extends Equatable {
     return PlaceDto(
       id: id ?? this.id,
       name: name ?? this.name,
-      address: address ?? this.address,
+      region: region ?? this.region,
       longitude: longitude ?? this.longitude,
       latitude: latitude ?? this.latitude,
       rating: rating ?? this.rating,
@@ -59,7 +58,7 @@ class PlaceDto extends Equatable {
 
   @override
   String toString() {
-    return 'PlaceDto(id: $id, name: $name, address: $address, longitude: $longitude, latitude: $latitude, rating: $rating, visitCount: $visitCount, images: $images)';
+    return 'PlaceDto(id: $id, name: $name, region: $region, longitude: $longitude, latitude: $latitude, rating: $rating, visitCount: $visitCount, images: $images)';
   }
 
   @override
@@ -67,7 +66,7 @@ class PlaceDto extends Equatable {
     return [
       id,
       name,
-      address,
+      region,
       longitude,
       latitude,
       rating,

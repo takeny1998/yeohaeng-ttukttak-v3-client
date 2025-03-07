@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-import 'package:yeohaeng_ttukttak_v3/domain/model/image_model.dart';
+import 'package:yeohaeng_ttukttak_v3/data/model/image_model.dart';
+import 'package:yeohaeng_ttukttak_v3/data/model/region_model.dart';
 
 class PlaceModel extends Equatable {
 
@@ -10,7 +11,7 @@ class PlaceModel extends Equatable {
 
   final String name;
 
-  final String regionCode;
+  final RegionModel region;
 
   final double longitude;
 
@@ -25,7 +26,7 @@ class PlaceModel extends Equatable {
   const PlaceModel({
     required this.id,
     required this.name,
-    required this.regionCode,
+    required this.region,
     required this.longitude,
     required this.latitude,
     required this.rating,
@@ -37,7 +38,7 @@ class PlaceModel extends Equatable {
   PlaceModel copyWith({
     int? id,
     String? name,
-    String? regionCode,
+    RegionModel? region,
     double? longitude,
     double? latitude,
     double? rating,
@@ -47,7 +48,7 @@ class PlaceModel extends Equatable {
     return PlaceModel(
       id: id ?? this.id,
       name: name ?? this.name,
-      regionCode: regionCode ?? this.regionCode,
+      region: region ?? this.region,
       longitude: longitude ?? this.longitude,
       latitude: latitude ?? this.latitude,
       rating: rating ?? this.rating,
@@ -60,7 +61,7 @@ class PlaceModel extends Equatable {
     return {
       'id': id,
       'name': name,
-      'regionCode': regionCode,
+      'region': region.toMap(),
       'longitude': longitude,
       'latitude': latitude,
       'rating': rating,
@@ -73,7 +74,7 @@ class PlaceModel extends Equatable {
     return PlaceModel(
       id: map['id']?.toInt() ?? 0,
       name: map['name'] ?? '',
-      regionCode: map['regionCode'] ?? '',
+      region: RegionModel.fromMap(map['region']),
       longitude: map['longitude']?.toDouble() ?? 0.0,
       latitude: map['latitude']?.toDouble() ?? 0.0,
       rating: map['rating']?.toDouble() ?? 0.0,
@@ -88,7 +89,7 @@ class PlaceModel extends Equatable {
 
   @override
   String toString() {
-    return 'Place(id: $id, name: $name, regionCode: $regionCode, longitude: $longitude, latitude: $latitude, rating: $rating, visitCount: $visitCount, images: $images)';
+    return 'PlaceModel(id: $id, name: $name, region: $region, longitude: $longitude, latitude: $latitude, rating: $rating, visitCount: $visitCount, images: $images)';
   }
 
   @override
@@ -96,7 +97,7 @@ class PlaceModel extends Equatable {
     return [
       id,
       name,
-      regionCode,
+      region,
       longitude,
       latitude,
       rating,

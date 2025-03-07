@@ -6,7 +6,7 @@ import 'package:yeohaeng_ttukttak_v3/data/repository/place_repository.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/dto/image_dto.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/dto/map_marker_dto.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/dto/place_dto.dart';
-import 'package:yeohaeng_ttukttak_v3/domain/model/place_model.dart';
+import 'package:yeohaeng_ttukttak_v3/data/model/place_model.dart';
 import 'package:yeohaeng_ttukttak_v3/domain/service/image_url_service.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/provider/map_provider.dart';
 
@@ -41,7 +41,7 @@ class ExploreProvider extends AsyncNotifier<List<PlaceDto>> {
   PlaceDto _convertToDto(PlaceModel place) => PlaceDto(
         id: place.id,
         name: place.name,
-        address: place.regionCode,
+        region: place.region,
         longitude: place.longitude,
         latitude: place.latitude,
         rating: place.rating,

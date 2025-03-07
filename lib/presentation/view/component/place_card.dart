@@ -44,7 +44,7 @@ class PlaceCard extends StatelessWidget {
           titleTextStyle: titleMedium?.copyWith(fontWeight: FontWeight.bold),
           subtitleTextStyle: subtitleTextStyle,
           title: Text(place.name),
-          subtitle: Text(place.address),
+          subtitle: Text(place.region.name),
           trailing: IconButton.filledTonal(
               onPressed: () {},
               icon: const Icon(Icons.bookmark_border),

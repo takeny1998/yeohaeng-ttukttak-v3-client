@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yeohaeng_ttukttak_v3/domain/model/image_model.dart';
+import 'package:yeohaeng_ttukttak_v3/data/model/image_model.dart';
 
 abstract interface class ImageUrlService {
 
