@@ -30,9 +30,6 @@ class ExplorePage extends ConsumerWidget {
             .whenOrNull(data: (data) => data) ??
         [];
 
-
-    
-
     return Scaffold(
       body: MaterialResponsiveSheetLayout(
           header: MaterialSheetHeader(
@@ -99,21 +96,23 @@ class ExplorePage extends ConsumerWidget {
                           onPressed: () {}, icon: const Icon(Icons.search)))
                 ],
               )),
-          content: MaterialSheetContent(
-              title: Row(
-                children: [
-                  Wrap(
-                    direction: Axis.vertical,
-                    children: [
-                      Text(region.name, style: titleLarge),
-                      Text('${places.length}개 결과',
-                          style: bodyMedium?.copyWith(color: onSurfaceVariant))
-                    ],
-                  ),
-                ],
-              ),
+          title: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Wrap(direction: Axis.vertical, children: [
+              Text(region.name, style: titleLarge),
+              Text('${places.length}개 결과',
+                  style: bodyMedium?.copyWith(color: onSurfaceVariant))
+            ]),
+          ),
+          content: SliverList.separated(
               itemCount: places.length,
-              itemBuilder: (context, index) => PlaceCard(place: places[index])),
+              key: ValueKey(region.code),
+              itemBuilder: (context, index) {
+                return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: PlaceCard(place: places[index]));
+              },
+              separatorBuilder: (_, __) => const SizedBox(height: 24.0)),
           background: MapLayout(places: places)),
     );
   }

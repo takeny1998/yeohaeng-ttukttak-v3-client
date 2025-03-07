@@ -6,14 +6,20 @@ class MaterialBottomSheetLayout extends StatefulWidget
     implements MaterialSheetLayout {
   @override
   final MaterialSheetHeader header;
+
   @override
-  final MaterialSheetContent content;
+  final Widget title;
+
+  @override
+  final Widget content;
+
   @override
   final Widget background;
 
   const MaterialBottomSheetLayout({
     super.key,
     required this.header,
+    required this.title,
     required this.content,
     required this.background,
   });
@@ -26,7 +32,7 @@ class MaterialBottomSheetLayout extends StatefulWidget
 class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
   final ScrollController scrollController = ScrollController();
 
-  final List<double> positions = [0.0, 0.4, 1.0];
+  final List<double> positions = [0.0, 0.15, 1.0];
 
   static const double maxWidth = 640.0;
   static const double scrollThreshold = -32.0;
@@ -176,43 +182,40 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
 
                             return false;
                           },
-                          child: ListView(
+                          child: CustomScrollView(
                             controller: scrollController,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 24.0),
                             physics: isFullyExpanded
                                 ? const BouncingScrollPhysics()
                                 : const NeverScrollableScrollPhysics(),
-                            children: [
-                              AnimatedCrossFade(
-                                  firstChild: Container(
-                                      width: double.infinity,
-                                      padding:
-                                          const EdgeInsets.only(bottom: 22.0),
-                                      child: Center(
-                                          child: Container(
-                                        width: 32.0,
-                                        height: 4.0,
-                                        decoration: BoxDecoration(
-                                            color: isFullyExpanded
-                                                ? Colors.transparent
-                                                : onSurfaceVariant,
-                                            borderRadius:
-                                                BorderRadius.circular(16.0)),
-                                      ))),
-                                  secondChild: const SizedBox(height: 8.0),
-                                  crossFadeState: isFullyExpanded
-                                      ? CrossFadeState.showSecond
-                                      : CrossFadeState.showFirst,
-                                  duration: const Duration(milliseconds: 250)),
-                              widget.content.title,
-                              const SizedBox(height: 16.0),
-                              for (int i = 0;
-                                  i < widget.content.itemCount;
-                                  i++) ...[
-                                widget.content.itemBuilder(context, i),
-                                const SizedBox(height: 24.0),
-                              ]
+                            slivers: [
+                              SliverToBoxAdapter(
+                                  child: AnimatedCrossFade(
+                                      firstChild: Container(
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 22.0),
+                                          child: Center(
+                                              child: Container(
+                                            width: 32.0,
+                                            height: 4.0,
+                                            decoration: BoxDecoration(
+                                                color: isFullyExpanded
+                                                    ? Colors.transparent
+                                                    : onSurfaceVariant,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        16.0)),
+                                          ))),
+                                      secondChild: const SizedBox(height: 8.0),
+                                      crossFadeState: isFullyExpanded
+                                          ? CrossFadeState.showSecond
+                                          : CrossFadeState.showFirst,
+                                      duration:
+                                          const Duration(milliseconds: 250))),
+                              SliverToBoxAdapter(child: widget.title),
+                              const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
+                              widget.content,
+                              const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
                             ],
                           ),
                         ),

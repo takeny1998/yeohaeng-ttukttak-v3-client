@@ -11,29 +11,19 @@ class MaterialSheetHeader {
   final Widget appBar;
 
   MaterialSheetHeader({required this.headerBuilder, required this.appBar});
-
-}
-
-class MaterialSheetContent  {
-
-  final Widget title;
-
-  final int itemCount;
-
-  final Widget Function(BuildContext context, int index) itemBuilder;
-
-  MaterialSheetContent({required this.title, required this.itemCount, required this.itemBuilder});
-
 }
 
 abstract interface class MaterialSheetLayout {
 
   final MaterialSheetHeader header;
-  final MaterialSheetContent content;
+
+  final Widget title;
+  final Widget content;
   final Widget background;
 
   MaterialSheetLayout({
     required this.header,
+    required this.title,
     required this.content,
     required this.background,
   });

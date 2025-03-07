@@ -12,7 +12,10 @@ class MaterialResponsiveSheetLayout extends ConsumerWidget
   final MaterialSheetHeader header;
 
   @override
-  final MaterialSheetContent content;
+  final Widget title;
+
+  @override
+  final Widget content;
 
   @override
   final Widget background;
@@ -20,13 +23,13 @@ class MaterialResponsiveSheetLayout extends ConsumerWidget
   const MaterialResponsiveSheetLayout({
     super.key,
     required this.header,
+    required this.title,
     required this.content,
     required this.background,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final layout = ref.watch(materialLayoutProvider);
 
     final int index = layout.layout < MaterialLayout.large.layout ? 0 : 1;
@@ -36,11 +39,13 @@ class MaterialResponsiveSheetLayout extends ConsumerWidget
       children: [
         MaterialBottomSheetLayout(
           header: header,
+          title: title,
           content: content,
           background: background,
         ),
         MaterialSideSheetLayout(
           header: header,
+          title: title,
           content: content,
           background: background,
         ),
