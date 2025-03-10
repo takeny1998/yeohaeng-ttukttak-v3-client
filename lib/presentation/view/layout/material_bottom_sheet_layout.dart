@@ -212,8 +212,6 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
                                           : CrossFadeState.showFirst,
                                       duration:
                                           const Duration(milliseconds: 250))),
-                              SliverToBoxAdapter(child: widget.title),
-                              const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
                               widget.content,
                               const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
                             ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yeohaeng_ttukttak_v3/data/model/place_model.dart';
+import 'package:yeohaeng_ttukttak_v3/data/model/region_model.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/provider/map_provider.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/provider/place_provider.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/component/place_card.dart';
@@ -22,13 +24,7 @@ class ExplorePage extends ConsumerWidget {
 
     final TextTheme(:titleLarge, :bodyMedium) = Theme.of(context).textTheme;
 
-    final region =
-        ref.watch(mapLocationProvider.select((location) => location.region));
-
-    final places = ref
-            .watch(regionPlaceListProvider(region))
-            .whenOrNull(data: (data) => data) ??
-        [];
+    final AsyncValue<RegionModel> regionState = ref.watch(mapRegionProvider);
 
     return Scaffold(
       body: MaterialResponsiveSheetLayout(
@@ -96,24 +92,56 @@ class ExplorePage extends ConsumerWidget {
                           onPressed: () {}, icon: const Icon(Icons.search)))
                 ],
               )),
-          title: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Wrap(direction: Axis.vertical, children: [
-              Text(region.name, style: titleLarge),
-              Text('${places.length}개 결과',
-                  style: bodyMedium?.copyWith(color: onSurfaceVariant))
-            ]),
-          ),
-          content: SliverList.separated(
-              itemCount: places.length,
-              key: ValueKey(region.code),
-              itemBuilder: (context, index) {
-                return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: PlaceCard(place: places[index]));
+          title: const SizedBox(),
+          content: regionState.when(
+              data: (region) {
+                final List<PlaceModel> places = ref
+                        .watch(regionPlaceListProvider(region))
+                        .whenOrNull(data: (data) => data) ??
+                    [];
+                    
+                return SliverMainAxisGroup(
+                  slivers: [
+                    SliverToBoxAdapter(
+                        child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Wrap(direction: Axis.vertical, children: [
+                        Text(region.name, style: titleLarge),
+                        Text('${places.length}개 결과',
+                            style:
+                                bodyMedium?.copyWith(color: onSurfaceVariant)),
+                        const SizedBox(height: 16.0),
+                      ]),
+                    )),
+                    SliverList.separated(
+                        itemCount: places.length,
+                        key: ValueKey(region.code),
+                        itemBuilder: (context, index) {
+                          return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: PlaceCard(place: places[index]));
+                        },
+                        separatorBuilder: (_, __) =>
+                            const SizedBox(height: 24.0)),
+                  ],
+                );
               },
-              separatorBuilder: (_, __) => const SizedBox(height: 24.0)),
-          background: MapLayout(places: places)),
+              error: (error, st) {
+                debugPrintStack(stackTrace: st);
+                return SliverToBoxAdapter(child: Center(child: Text(error.toString())));
+              },
+              loading: () => const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()))),
+          background: regionState.whenOrNull(
+                data: (region) {
+                  final List<PlaceModel> places = ref
+                          .watch(regionPlaceListProvider(region))
+                          .whenOrNull(data: (data) => data) ??
+                      [];
+                  return MapLayout(places: places);
+                },
+              ) ??
+              const MapLayout(places: [])),
     );
   }
 }

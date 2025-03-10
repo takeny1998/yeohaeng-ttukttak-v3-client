@@ -8,11 +8,8 @@ import 'package:yeohaeng_ttukttak_v3/data/model/place_model.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/provider/map_provider.dart';
 
 class MapLayout extends ConsumerStatefulWidget {
-
   final List<PlaceModel> places;
-  const MapLayout({super.key, 
-    required this.places
-  });
+  const MapLayout({super.key, required this.places});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MapLayoutState();
@@ -81,30 +78,25 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
   @override
   Widget build(BuildContext context) {
     final tileUrl = ref.watch(tileUrlProvider);
-    final initialLocation = ref.read(mapLocationProvider);
-
     final places = widget.places;
 
     return FlutterMap(
       mapController: mapController,
       options: MapOptions(
-          initialCenter:
-              LatLng(initialLocation.latitude, initialLocation.longitude),
-          initialZoom: initialLocation.zoom,
-          interactionOptions: const InteractionOptions(
-            flags: InteractiveFlag.pinchZoom | InteractiveFlag.drag | InteractiveFlag.doubleTapZoom
-          ),
-          keepAlive: true,
-          onPositionChanged: (camera, hasGesture) {
-            if (!hasGesture) return;
-
-            ref
-              .read(mapLocationProvider.notifier)
-              .updateMapState(
-                  longitude: camera.center.longitude,
-                  latitude: camera.center.latitude,
-                  zoom: camera.zoom);
-          }),
+        initialCenter: const LatLng(36.621087, 127.492913),
+        initialZoom: 15.0,
+        interactionOptions: const InteractionOptions(
+            flags: InteractiveFlag.pinchZoom |
+                InteractiveFlag.drag |
+                InteractiveFlag.doubleTapZoom),
+        keepAlive: true,
+        onPointerUp: (event, point) {
+          final LatLng center = mapController.camera.center;
+          ref
+              .read(mapRegionProvider.notifier)
+              .updateRegion(center.longitude, center.latitude);
+        },
+      ),
       children: [
         TileLayer(
             urlTemplate: tileUrl,

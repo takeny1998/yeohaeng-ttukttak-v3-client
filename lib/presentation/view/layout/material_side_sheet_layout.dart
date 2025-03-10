@@ -53,8 +53,6 @@ class MaterialSideSheetLayout extends StatelessWidget
           child: CustomScrollView(
             slivers: [
               const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
-              SliverToBoxAdapter(child: title),
-              const SliverToBoxAdapter(child: SizedBox(height: 16.0)),
               content,
               const SliverToBoxAdapter(child: SizedBox(height: 24.0)),
             ],
