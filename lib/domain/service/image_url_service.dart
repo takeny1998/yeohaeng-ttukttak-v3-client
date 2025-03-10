@@ -13,7 +13,7 @@ class PicksumUrlService implements ImageUrlService {
     return Uri(
       scheme: 'https',
       host: 'picsum.photos',
-      path: '/id/${image.id}/$width/$height'
+      path: '/id/${image.id % 1084}/$width/$height'
     ).toString();
   }
 
