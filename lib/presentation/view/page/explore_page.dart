@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yeohaeng_ttukttak_v3/data/model/place_model.dart';
 import 'package:yeohaeng_ttukttak_v3/data/model/region_model.dart';
-import 'package:yeohaeng_ttukttak_v3/presentation/provider/map_provider.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/provider/map_region_provider.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/provider/place_provider.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/component/place_card.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/component/material_search_bar.dart';
@@ -45,34 +45,39 @@ class ExplorePage extends ConsumerWidget {
                               : null,
                         ),
                       ),
-                      SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          spacing: 8.0,
-                          children: [
-                            FilterChip(
-                                label: const Text('Date'),
-                                avatar: const Icon(Icons.today_outlined),
-                                onSelected: (isSelected) {}),
-                            FilterChip(
-                                label: const Text('Activity'),
-                                avatar:
-                                    const Icon(Icons.local_activity_outlined),
-                                onSelected: (isSelected) {}),
-                            FilterChip(
-                                label: const Text('Cost'),
-                                avatar: const Icon(Icons.attach_money_outlined),
-                                onSelected: (isSelected) {}),
-                            FilterChip(
-                                label: const Text('Companion'),
-                                avatar: const Icon(Icons.people_outline),
-                                onSelected: (isSelected) {}),
-                            FilterChip(
-                                label: const Text('Transport'),
-                                avatar: const Icon(Icons.local_taxi_outlined),
-                                onSelected: (isSelected) {}),
-                          ],
+                      Theme(
+                        data: Theme.of(context).copyWith(
+                          chipTheme: ChipThemeData(backgroundColor: surfaceContainerLow)
+                        ),
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            spacing: 8.0,
+                            children: [
+                              FilterChip(
+                                  label: const Text('Date'),
+                                  avatar: const Icon(Icons.today_outlined),
+                                  onSelected: (isSelected) {}),
+                              FilterChip(
+                                  label: const Text('Activity'),
+                                  avatar:
+                                      const Icon(Icons.local_activity_outlined),
+                                  onSelected: (isSelected) {}),
+                              FilterChip(
+                                  label: const Text('Cost'),
+                                  avatar: const Icon(Icons.attach_money_outlined),
+                                  onSelected: (isSelected) {}),
+                              FilterChip(
+                                  label: const Text('Companion'),
+                                  avatar: const Icon(Icons.people_outline),
+                                  onSelected: (isSelected) {}),
+                              FilterChip(
+                                  label: const Text('Transport'),
+                                  avatar: const Icon(Icons.local_taxi_outlined),
+                                  onSelected: (isSelected) {}),
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16.0),
