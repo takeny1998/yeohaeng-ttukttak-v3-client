@@ -32,14 +32,14 @@ class MaterialBottomSheetLayout extends StatefulWidget
 class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
   final ScrollController scrollController = ScrollController();
 
-  final List<double> positions = [0.0, 0.15, 1.0];
+  final List<double> positions = [0.0, 0.25, 1.0];
 
   static const double maxWidth = 640.0;
   static const double scrollThreshold = -32.0;
 
   double sheetHeight = 0.0;
 
-  int index = 1;
+  int index = 0;
 
   bool isAnimating = false;
   bool isContentScrolled = false;
@@ -105,7 +105,7 @@ class _MaterialBottomSheetLayoutState extends State<MaterialBottomSheetLayout> {
                           : null,
                       constraints: BoxConstraints(
                           maxWidth: maxWidth,
-                          minHeight: 48.0,
+                          minHeight: 72.0,
                           maxHeight: height),
                       decoration: BoxDecoration(
                           color: surface,
