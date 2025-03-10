@@ -11,7 +11,7 @@ class MaterialSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme(:onSurfaceVariant) = Theme.of(context).colorScheme;
+    final ColorScheme(:onSurfaceVariant, :surfaceContainerLow) = Theme.of(context).colorScheme;
     return SearchBar(
       elevation: const WidgetStatePropertyAll(0.0),
       side: borderSide,
@@ -22,6 +22,7 @@ class MaterialSearchBar extends StatelessWidget {
         minHeight: 56.0,
         maxHeight: 56.0,
       ),
+      backgroundColor: WidgetStatePropertyAll(surfaceContainerLow),
       leading: IconButton(
         icon: Icon(Icons.menu, color: onSurfaceVariant),
         onPressed: () {},
