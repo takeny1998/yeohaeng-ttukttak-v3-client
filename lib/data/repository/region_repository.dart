@@ -14,7 +14,7 @@ class RegionRepository {
 
   Future<RegionResponse> findByCoords(
       final double longitude, final double latitude,
-      {int level = 3}) async {
+      {int level = 2}) async {
     final response = await get(Uri.https(
       baseUrl,
       '/api/v3/regions',
