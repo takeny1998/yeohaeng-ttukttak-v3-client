@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:yeohaeng_ttukttak_v3/data/model/place_model.dart';
-import 'package:yeohaeng_ttukttak_v3/presentation/provider/map_provider.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/provider/map_region_provider.dart';
 
 class MapLayout extends ConsumerStatefulWidget {
   final List<PlaceModel> places;
@@ -88,7 +88,8 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
         interactionOptions: const InteractionOptions(
             flags: InteractiveFlag.pinchZoom |
                 InteractiveFlag.drag |
-                InteractiveFlag.doubleTapZoom),
+                InteractiveFlag.doubleTapZoom | 
+                InteractiveFlag.scrollWheelZoom),
         keepAlive: true,
         onPointerUp: (event, point) {
           final LatLng center = mapController.camera.center;

@@ -25,12 +25,10 @@ class MapRegionNotifier extends AsyncNotifier<RegionModel> {
     }
 
     _future =
-        CancelableOperation.fromFuture(_updateRegion(longitude, latitude), onCancel: () => print('Cancel'));
+        CancelableOperation.fromFuture(_updateRegion(longitude, latitude));
   }
 
   Future<void> _updateRegion(double longitude, double latitude) async {
-    print('start');
-
     state = await AsyncValue.guard(() async {
       final RegionResponse response = await ref
           .read(regionRepositoryProvider)
@@ -38,8 +36,6 @@ class MapRegionNotifier extends AsyncNotifier<RegionModel> {
 
       return response.region;
     });
-
-    print('completed');
   }
 }
 
