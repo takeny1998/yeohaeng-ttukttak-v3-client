@@ -7,11 +7,11 @@ import 'package:latlong2/latlong.dart';
 import 'package:collection/collection.dart';
 
 import 'package:yeohaeng_ttukttak_v3/data/model/place_model.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/provider/map_place_list_provider.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/provider/map_region_provider.dart';
 
 class MapLayout extends ConsumerStatefulWidget {
-  final List<PlaceModel> places;
-  const MapLayout({super.key, required this.places});
+  const MapLayout({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MapLayoutState();
@@ -122,7 +122,7 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
   @override
   Widget build(BuildContext context) {
     final tileUrl = ref.watch(tileUrlProvider);
-    final places = widget.places;
+    final places = ref.watch(mapPlaceListProvider);
 
     final markers =
         places.mapIndexed((index, dto) => buildMarker(dto, index)).toList();
