@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yeohaeng_ttukttak_v3/data/model/place_model.dart';
 import 'package:yeohaeng_ttukttak_v3/data/model/region_model.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/provider/map_region_provider.dart';
-import 'package:yeohaeng_ttukttak_v3/presentation/provider/place_provider.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/provider/region_place_list_provider.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/component/place_card.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/component/material_search_bar.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/map_layout.dart';
@@ -47,8 +47,8 @@ class ExplorePage extends ConsumerWidget {
                       ),
                       Theme(
                         data: Theme.of(context).copyWith(
-                          chipTheme: ChipThemeData(backgroundColor: surfaceContainerLow)
-                        ),
+                            chipTheme: ChipThemeData(
+                                backgroundColor: surfaceContainerLow)),
                         child: SingleChildScrollView(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           scrollDirection: Axis.horizontal,
@@ -66,7 +66,8 @@ class ExplorePage extends ConsumerWidget {
                                   onSelected: (isSelected) {}),
                               FilterChip(
                                   label: const Text('Cost'),
-                                  avatar: const Icon(Icons.attach_money_outlined),
+                                  avatar:
+                                      const Icon(Icons.attach_money_outlined),
                                   onSelected: (isSelected) {}),
                               FilterChip(
                                   label: const Text('Companion'),
@@ -104,7 +105,7 @@ class ExplorePage extends ConsumerWidget {
                         .watch(regionPlaceListProvider(region))
                         .whenOrNull(data: (data) => data) ??
                     [];
-                    
+
                 return SliverMainAxisGroup(
                   slivers: [
                     SliverToBoxAdapter(
@@ -134,19 +135,12 @@ class ExplorePage extends ConsumerWidget {
               },
               error: (error, st) {
                 debugPrintStack(stackTrace: st);
-                return SliverToBoxAdapter(child: Center(child: Text(error.toString())));
+                return SliverToBoxAdapter(
+                    child: Center(child: Text(error.toString())));
               },
-              loading: () => const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()))),
-          background: regionState.whenOrNull(
-                data: (region) {
-                  final List<PlaceModel> places = ref
-                          .watch(regionPlaceListProvider(region))
-                          .whenOrNull(data: (data) => data) ??
-                      [];
-                  return MapLayout(places: places);
-                },
-              ) ??
-              const MapLayout(places: [])),
+              loading: () => const SliverToBoxAdapter(
+                  child: Center(child: CircularProgressIndicator()))),
+          background: const MapLayout()),
     );
   }
 }
