@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:collection/collection.dart';
 
 import 'package:yeohaeng_ttukttak_v3/data/model/place_model.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/provider/map_region_provider.dart';
@@ -24,53 +26,95 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
     super.dispose();
   }
 
-  Marker buildMarker(PlaceModel place) {
+  Marker buildMarker(PlaceModel place, int order) {
+    final Text text = Text(
+      place.name,
+      maxLines: 2,
+      style: const TextStyle(
+        fontSize: 12.0,
+        overflow: TextOverflow.ellipsis,
+        color: Color(0XFF49454F),
+      ),
+    );
     return Marker(
-      width: 18.0,
-      height: 18.0,
+      width: 96.0,
+      height: 62.0,
+      key: ValueKey<int>(order),
       point: LatLng(place.latitude, place.longitude),
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color(0XFF79747E),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: Colors.white, width: 1.0),
+      child: SizedBox(
+        child: Column(
+          children: [
+            Container(
+                width: 18.0,
+                height: 18.0,
+                decoration: BoxDecoration(
+                  color: const Color(0XFF79747E),
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: Colors.white, width: 1.0),
+                ),
+                child: const Center(
+                    child: Icon(Icons.location_on,
+                        color: Colors.white, size: 10.0))),
+            const SizedBox(height: 2.0),
+            Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Text(text.data!,
+                    maxLines: text.maxLines,
+                    textScaler: text.textScaler,
+                    style: text.style?.copyWith(
+                        foreground: Paint()
+                          ..color = Colors.white
+                          ..style = PaintingStyle.stroke
+                          ..strokeWidth = 2.0)),
+                text,
+              ],
+            ),
+          ],
         ),
-        child: const Center(
-            child: Icon(Icons.location_on, color: Colors.white, size: 10.0)),
       ),
     );
   }
 
-  Marker buildLabel(PlaceModel place) {
+  Widget buildCluster(PlaceModel place, int clusterCount) {
     final Text text = Text(
       place.name,
+      maxLines: 2,
       style: const TextStyle(
-        fontSize: 14.0,
+        fontSize: 12.0,
+        overflow: TextOverflow.ellipsis,
         color: Color(0XFF49454F),
       ),
     );
 
-    return Marker(
-      width: 160.0,
-      height: 28.0,
-      point: LatLng(place.latitude, place.longitude),
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        padding: const EdgeInsets.only(top: 9.0),
-        constraints: const BoxConstraints(maxWidth: 160.0),
-        alignment: Alignment.topCenter,
-        child: Stack(
-          children: [
-            Text(text.data!,
-                textScaler: text.textScaler,
-                style: text.style?.copyWith(
-                    foreground: Paint()
-                      ..color = Colors.white
-                      ..style = PaintingStyle.stroke
-                      ..strokeWidth = 2.0)),
-            text,
-          ],
-        ),
+    return SizedBox(
+      child: Column(
+        children: [
+          Container(
+              width: 24.0,
+              height: 24.0,
+              decoration: BoxDecoration(
+                color: const Color(0XFF79747E),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: Colors.white, width: 1.0),
+              ),
+              child: Center(child: Text(clusterCount.toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 12.0)))),
+          const SizedBox(height: 2.0),
+          Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Text(text.data!,
+                  maxLines: text.maxLines,
+                  textScaler: text.textScaler,
+                  style: text.style?.copyWith(
+                      foreground: Paint()
+                        ..color = Colors.white
+                        ..style = PaintingStyle.stroke
+                        ..strokeWidth = 2.0)),
+              text,
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -80,6 +124,9 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
     final tileUrl = ref.watch(tileUrlProvider);
     final places = widget.places;
 
+    final markers =
+        places.mapIndexed((index, dto) => buildMarker(dto, index)).toList();
+
     return FlutterMap(
       mapController: mapController,
       options: MapOptions(
@@ -88,7 +135,7 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
         interactionOptions: const InteractionOptions(
             flags: InteractiveFlag.pinchZoom |
                 InteractiveFlag.drag |
-                InteractiveFlag.doubleTapZoom | 
+                InteractiveFlag.doubleTapZoom |
                 InteractiveFlag.scrollWheelZoom),
         keepAlive: true,
         onPointerUp: (event, point) {
@@ -102,8 +149,24 @@ class _MapLayoutState extends ConsumerState<MapLayout> {
         TileLayer(
             urlTemplate: tileUrl,
             tileProvider: CancellableNetworkTileProvider()),
-        MarkerLayer(markers: places.map((dto) => buildMarker(dto)).toList()),
-        MarkerLayer(markers: places.map((dto) => buildLabel(dto)).toList()),
+        MarkerClusterLayerWidget(
+            options: MarkerClusterLayerOptions(
+                markers: markers,
+                size: const Size(96.0, 68.0),
+                maxClusterRadius: 128,
+                builder: (context, markers) {
+                  final marker = markers.reduce((a, b) {
+                    final orderA = (a.key as ValueKey<int>).value;
+                    final orderB = (b.key as ValueKey<int>).value;
+
+                    if (orderA < orderB) return a;
+                    return b;
+                  });
+
+                  return buildCluster(
+                      places[(marker.key as ValueKey<int>).value],
+                      markers.length);
+                })),
       ],
     );
   }
