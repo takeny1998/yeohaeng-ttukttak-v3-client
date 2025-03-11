@@ -7,7 +7,7 @@ import 'package:yeohaeng_ttukttak_v3/presentation/provider/region_place_list_pro
 import 'package:yeohaeng_ttukttak_v3/presentation/view/component/place_card.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/component/material_search_bar.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/map_layout.dart';
-import 'package:yeohaeng_ttukttak_v3/domain/entity/material_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/sheet_layout/material_sheet_layout.dart';
 import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/material_responsive_sheet_layout.dart';
 
 class ExplorePage extends ConsumerWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:yeohaeng_ttukttak_v3/domain/entity/material_sheet_layout.dart';
+import 'package:yeohaeng_ttukttak_v3/presentation/view/layout/sheet_layout/material_sheet_layout.dart';
 
 class MaterialBottomSheetLayout extends StatefulWidget
     implements MaterialSheetLayout {
